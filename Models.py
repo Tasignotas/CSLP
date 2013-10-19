@@ -17,3 +17,11 @@ class Bus:
         self.status = 'Queueing'
         self.location = location
         self.passengers = []
+        
+        
+class Stop:
+    ''' A class representing a bus stop in the bus network'''
+    def __init__(self, stopID):
+        self.stopID = stopID
+        self.qOfBusses = []
+        self.passengers = []
