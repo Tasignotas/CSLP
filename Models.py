@@ -55,3 +55,11 @@ class Network:
         if not (stop1 in self.roads.keys()):
             self.roads[stop1] = {}
         self.roads[stop1][stop2] = throughput
+
+
+    def addRoute(self, routeID, stopIDs, busCount, capacity):
+        ''' This method adds a route with its busses and stops to the network'''
+        self.routes[routeID] = Route(stopIDs.split(' '), routeID, capacity)
+        # Adding busses to the route:
+        for i in range(0, busCount):
+            self.routes[routeID].addNewBus()
