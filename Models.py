@@ -29,7 +29,8 @@ class Stop:
     
 class Route:
     ''' A class representing a particular route in the bus network'''
-    def __init__(self, stopSequence):
+    def __init__(self, stopSequence, routeID):
+        self.routeID = routeID
         self.stopSequence = stopSequence
         self.busses = []
 
