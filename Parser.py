@@ -11,6 +11,7 @@ class Parser:
     '''
     @staticmethod
     def parseFile(inputFileName):
+        ''' Static method that parses the given input file'''
         inputFile = open(inputFileName, 'r')
         network = Network
         simulation = Simulation
