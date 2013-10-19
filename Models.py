@@ -39,3 +39,11 @@ class Roads:
     ''' A class representing roads with their throughput in the bus network'''
     def __init(self):
         self.roads = {}
+        
+        
+class Network:
+    ''' A class representing the entire bus network'''
+    def __init__(self):
+        self.routes = {}
+        self.stops = {}
+        self.roads = Roads
