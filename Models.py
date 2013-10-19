@@ -26,8 +26,15 @@ class Stop:
         self.qOfBusses = []
         self.passengers = []
     
+    
 class Route:
     ''' A class representing a particular route in the bus network'''
     def __init__(self, stopSequence):
         self.stopSequence = stopSequence
         self.busses = []
+
+
+class Roads:
+    ''' A class representing roads with their throughput in the bus network'''
+    def __init(self):
+        self.roads = {}
