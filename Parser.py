@@ -5,20 +5,21 @@ parameters of the simulation.
 '''
 import re
 from Models import Network
+from Simulation import Simulation
+
 
 class Parser:
     ''' Class that takes the input file and constructs the initial model
     of the bus network and the simulation
     '''
     @staticmethod
-    def parseFile(inputFileName):
+    def parseFile(inputFileName, simulation):
         ''' Static method that parses the given input file'''
         inputFile = open(inputFileName, 'r')
         network = Network
-        simulation = Simulation
         for line in inputFile:
             parseLine(line.strip(), network, simulation)
-        return network, simulation
+        return network
 
 
     @staticmethod
