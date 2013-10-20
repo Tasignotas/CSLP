@@ -10,7 +10,7 @@ class Passenger:
         
 class Bus:
     ''' A class representing a bus going on some route in the bus network'''
-    def __init__(self, routeID, busNumber, capacity, status, location):
+    def __init__(self, routeID, busNumber, capacity, location):
         self.routeID = routeID
         self.busNumber = busNumber
         self.capacity = capacity
