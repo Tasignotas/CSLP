@@ -28,15 +28,15 @@ class Parser:
         the network and simulation objects'''
         # Parsing arguments that affect the simulation object:
         if line.startswith('board'):
-            simulation.setBoardRatio(line.split(' ')[1])
+            simulation.boardRatio = float(line.split(' ')[1])
         elif line.startswith('disembarks'):
-            simulation.setDisembarksRatio(line.split(' ')[1])
+            simulation.disembarksRatio = float(line.split(' ')[1])
         elif line.startswith('departs'):
-            simulation.setDepRatio(line.split(' ')[1])
+            simulation.depRatio = float(line.split(' ')[1])
         elif line.startswith('new passengers'):
-            simulation.setNewPassRatio(line.split(' ')[2])
+            simulation.newPassRatio = float(line.split(' ')[2])
         elif line.startswith('stop time'):
-            simulation.setStopTime(line.split(' ')[2])
+            simulation.stopTime = float(line.split(' ')[2])
         elif line.startswith('ignore warnings'):
             simulation.ignoreWarnings = True
         elif line.startswith('optimise parameters'):
