@@ -40,12 +40,6 @@ class Route:
         location = len(self.busses) % len(self.stopSequence)
         self.busses.append(Bus(self.routeID, len(self.busses), self.capacity,
                            location))
-
-
-class Roads:
-    ''' A class representing roads with their throughput in the bus network'''
-    def __init(self):
-        self.roads = {}
         
         
 class Network:
@@ -53,7 +47,7 @@ class Network:
     def __init__(self):
         self.routes = {}
         self.stops = {}
-        self.roads = Roads
+        self.roads = {}
     
     
     def addRoad(self, stop1, stop2, throughput):
