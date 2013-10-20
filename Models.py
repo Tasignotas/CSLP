@@ -35,7 +35,7 @@ class Route:
         self.capacity = capacity
         self.busses = []
 
-    def addNewBus(self):
+    def addBus(self):
         ''' This method adds a new bus to the route'''
         location = len(self.busses) % len(self.stopSequence)
         self.busses.append(Bus(self.routeID, len(self.busses), self.capacity,
@@ -63,7 +63,7 @@ class Network:
         self.routes[routeID] = Route(stopIDs.split(' '), routeID, capacity)
         # Adding busses to the route:
         for i in range(0, busCount):
-            self.routes[routeID].addNewBus()
+            self.routes[routeID].addBus()
         # Adding new stops to the network:
         for i in stopIDs.split(' '):
             if not (i in self.stops.keys()):
