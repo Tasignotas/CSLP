@@ -38,9 +38,9 @@ class Parser:
         elif line.startswith('stop time'):
             simulation.setStopTime(line.split(' ')[2])
         elif line.startswith('ignore warnings'):
-            simulation.setIgnoreWarn()
+            simulation.ignoreWarnings = True
         elif line.startswith('optimise parameters'):
-            simulation.optimiseParams()
+            simulation.optimiseParams = True
         # Parsing arguments that affect the network object:
         elif line.startswith('route'):
             matches = re.search('''route\s([0-9]*)\sstops\s([0-9 ]*)\sbuses\s
