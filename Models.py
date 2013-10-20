@@ -64,3 +64,7 @@ class Network:
         # Adding busses to the route:
         for i in range(0, busCount):
             self.routes[routeID].addNewBus()
+        # Adding new stops to the network:
+        for i in stopIDs.split(' '):
+            if not (i in self.stops.keys()):
+                self.stops[i] = Stop(i)
