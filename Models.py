@@ -35,6 +35,12 @@ class Route:
         self.capacity = capacity
         self.busses = []
 
+    def addNewBus(self):
+        ''' This method adds a new bus to the route'''
+        location = len(self.busses) % len(self.stopSequence)
+        self.busses.append(Bus(self.routeID, len(self.busses), self.capacity,
+                           location))
+
 
 class Roads:
     ''' A class representing roads with their throughput in the bus network'''
