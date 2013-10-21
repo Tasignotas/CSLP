@@ -40,3 +40,20 @@ class Simulation:
         # Buses ready to arrive rate:
         rates[busesRTARate] = sum([self.Network.getThroughput(bus) for bus in self.Network.getBusesRTA()])
         return rates
+
+
+    def executeNextEvent(self, totalRate, rates):
+        ''' This method chooses and executes an event, based on event rates'''
+        choice = uniform(0, totalRate)
+        if choice < rates[paxRTBRate]:
+            self.Network.boardPassenger()
+        elif choice < (rates[paxRTBRate] + rates[paxRTDRate]):
+            self.Network.disembarkPassenger()
+        elif choice < (rates[paxRTBRate] + rates[paxRTDRate] +
+                       rates[busesRTDRate]):
+            self.Network.departBus()
+        elif choice < (rates[paxRTBRate] + rates[paxRTDRate] +
+                       rates[busesRTDRate] + rates[busesRTARate]):
+            self.Network.arriveBus()
+        else:
+            self.Netowrk.addPassenger()
