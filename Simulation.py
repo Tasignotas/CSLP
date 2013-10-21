@@ -26,3 +26,17 @@ class Simulation:
             delay = -(1.0/totalRate) * log10(uniform(0.0, 1.0))
             self.executeNextEvent(totalRate, rates)
             currentTime += delay
+
+
+    def getEventRates(self):
+        ''' This method gets rates needed for choosing the event to execute'''
+        rates = {}
+        # Passengers ready to board rate:
+        rates[paxRTBRate] = len(self.Network.getPaxRTB()) * self.boardRatio
+        # Passengers ready to disembark rate:
+        rates[paxRTDRate] = len(self.Network.getPaxRTD()) * self.disembarksRatio
+        # Buses ready to depart rate:
+        rates[busesRTDRate] = len(self.Network.getBusesRTD()) * self.depRatio
+        # Buses ready to arrive rate:
+        rates[busesRTARate] = sum([self.Network.getThroughput(bus) for bus in self.Network.getBusesRTA()])
+        return rates
