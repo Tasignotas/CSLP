@@ -30,7 +30,15 @@ class Stop:
         self.stopID = stopID
         self.qOfBusses = []
         self.passengers = []
+        self.reachableStops = {}
     
+    
+    def addReachableStops(self, reachableStops):
+        ''' Method that adds new stops to the set of reachable stops'''
+        for stop in reachableStops:
+            if not (stop in self.reachableStops) and not (self.stopID == stop):
+                self.reachableStops.add(stop)
+                
     
 class Route:
     ''' A class representing a particular route in the bus network'''
@@ -73,6 +81,7 @@ class Network:
         for i in stopIDs.split(' '):
             if not (i in self.stops.keys()):
                 self.stops[i] = Stop(i)
+            self.stops[i].addReachableStops(stopIDs.split(' '))
     
     
     def addPassenger(self):
