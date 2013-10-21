@@ -2,6 +2,11 @@
 This file contains class descriptions for all kinds of objects
 used in the simulation to mimic the real world: stops, roads, passengers and etc.
 '''
+
+
+from random import randint, choice
+
+
 class Passenger:
     ''' A class representing a passenger in bus network'''
     def __init__(self, destStopID):
@@ -68,3 +73,10 @@ class Network:
         for i in stopIDs.split(' '):
             if not (i in self.stops.keys()):
                 self.stops[i] = Stop(i)
+    
+    
+    def addPassenger(self):
+        ''' This method adds a passenger to the bus network'''
+        originID = self.stops.keys()[randint(0, len(self.stops)-1)]
+        destID = choice(self.stops[originID].reachableStops())
+        self.stops[originID].passengers.append(Passenger(destID))
