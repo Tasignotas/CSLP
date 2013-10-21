@@ -15,6 +15,7 @@ class Simulation:
 
 
     def execute_simulation_loop(self):
+        ''' This method implements the main simulation loop '''
         currentTime = 0
         while currentTime <= self.stopTime:
             # Getting all of the events that could occur:
