@@ -153,3 +153,9 @@ class Network:
         (rand_pax, rand_bus) = choice(self.getPaxRTB())
         rand_bus.passengers.append(rand_pax)
         self.stops[rand_bus.location].passengers.pop(self.stops[rand_bus.location].passengers.index(rand_pax))
+        
+        
+    def disembarkPassenger(self):
+        ''' This method disembarks a random passenger from the bus that he's in'''
+        (rand_pax, rand_bus) = choice(self.getPaxRTD())
+        rand.bus.passengers.pop(rand_bus.passengers.index(rand_pax))
