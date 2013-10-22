@@ -113,3 +113,24 @@ class Network:
                 for pax in bus.passengers:
                     if (pax.destStopID == bus.location) and (bus.status == 'Queueing'):
                         paxRTD.append((pax, bus))
+
+
+    def getBusesRTD(self):
+        ''' This method gets all of the busses that are ready to depart from
+        the stop that they are located'''
+        busesRTD = []
+        for stop in self.stops:
+            for bus in stop.qOfBusses:
+                noneToDisembark = True
+                noneToBoard = True
+                # Checking if there is any passenger that wants to get onboard:
+                for pax in stop.passengers:
+                    if (pax.destStopID in self.routes[bus.routeID].stopSequence) and (len(bus.passengers) < bus.capacity):
+                        noneToBoard = False
+                # Checking if there is any passenger that wants to disembark:
+                for pax in bus.passengers:
+                    if (pax.destStopID == bus.location) and (bus.status == 'Queueing'):
+                        noneToDisembark = False
+                if noneToBoard and noneToDisembark:
+                    busesRTD.append((bus, stop))
+        return busesRTD
