@@ -102,4 +102,14 @@ class Network:
                     if (pax.destStopID in self.routes[firstBus.routeID].stopSequence) and (len(firstBus.passengers) < firstBus.capacity):
                         paxRTB.append((pax, bus))
         return paxRTB
-       
+
+
+    def getPaxRTD(self):
+        ''' This method gets all passengers that are in a bus, but would like
+        to get off the bus. Also, the bus is at a bus stop'''
+        paxRTD = []
+        for stop in self.stops:
+            for bus in stop.qOfBusses:
+                for pax in bus.passengers:
+                    if (pax.destStopID == bus.location) and (bus.status == 'Queueing'):
+                        paxRTD.append((pax, bus))
