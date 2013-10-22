@@ -166,3 +166,12 @@ class Network:
         (rand_bus, rand_stop) = choice(self.getBusesRTD())
         rand_stop.qOfBuses.pop(rand_stop.qOfBuses.index(rand_bus))
         rand_bus.status = 'Moving'
+
+
+    def arriveBus(self):
+        ''' This method makes a random bus that's ready to arrive to arrive'''
+        (rand_bus, rand_route) = choice(self.getBusesRTA())
+        next_stop_id = rand_route.getNextStop(rand_bus.location)
+        rand_bus.location = next_stop_id
+        rand_bus.state = 'Queueing'
+        self.stops[next_stop_id].qOfBuses.append(rand_bus)
