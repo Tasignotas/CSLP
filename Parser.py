@@ -16,9 +16,9 @@ class Parser:
     def parseFile(inputFileName, simulation):
         ''' Static method that parses the given input file'''
         inputFile = open(inputFileName, 'r')
-        network = Network
+        network = Network()
         for line in inputFile:
-            parseLine(line.strip(), network, simulation)
+            Parser.__parseLine(line.strip(), network, simulation)
         return network
 
 
