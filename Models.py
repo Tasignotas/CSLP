@@ -159,3 +159,10 @@ class Network:
         ''' This method disembarks a random passenger from the bus that he's in'''
         (rand_pax, rand_bus) = choice(self.getPaxRTD())
         rand.bus.passengers.pop(rand_bus.passengers.index(rand_pax))
+        
+
+    def departBus(self):
+        ''' This method departs a random bus that's ready to depart'''
+        (rand_bus, rand_stop) = choice(self.getBusesRTD())
+        rand_stop.qOfBuses.pop(rand_stop.qOfBuses.index(rand_bus))
+        rand_bus.status = 'Moving'
