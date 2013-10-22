@@ -134,3 +134,14 @@ class Network:
                 if noneToBoard and noneToDisembark:
                     busesRTD.append((bus, stop))
         return busesRTD
+
+
+    def getBusesRTA(self):
+        ''' This method gets all of the busses that are ready to arrive at
+        the stop that they are located at'''
+        busesRTA = []
+        for route in self.routes:
+            for bus in route.busses:
+                if bus.status == 'Moving':
+                    busesRTA.append((bus, route))
+        return busesRTA
