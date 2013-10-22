@@ -54,6 +54,11 @@ class Route:
         self.busses.append(Bus(self.routeID, len(self.busses), self.capacity,
                            location))
         
+
+    def getNextStop(self, currentStopID):
+        ''' This method gets the next stop's ID when current stop's ID is given'''
+        return self.stopSequence[(self.stopSequence.index(currentStopID) + 1) % len(self.stopSequence)]
+
         
 class Network:
     ''' A class representing the entire bus network'''
