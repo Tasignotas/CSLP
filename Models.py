@@ -145,3 +145,11 @@ class Network:
                 if bus.status == 'Moving':
                     busesRTA.append((bus, route))
         return busesRTA
+
+    
+    def boardPassenger(self):
+        ''' This method adds a random passenger to the bus
+        that he wishes to board'''
+        (rand_pax, rand_bus) = choice(self.getPaxRTB())
+        rand_bus.passengers.append(rand_pax)
+        self.stops[rand_bus.location].passengers.pop(self.stops[rand_bus.location].passengers.index(rand_pax))
