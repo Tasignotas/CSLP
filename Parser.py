@@ -44,7 +44,7 @@ class Parser:
         # Parsing arguments that affect the network object:
         elif line.startswith('route'):
             matches = re.search('route\s([0-9]*)\sstops\s([0-9 ]*)\sbuses\s([0-9]*)\scapacity\s([0-9]*)', line).groups()
-            network.addRoute(matches[0], matches[1], matches[2], matches[3])
+            network.addRoute(int(matches[0]), map(int, str(matches[1]).split(' ')), int(matches[2]), int(matches[3]))
         elif line.startswith('road'):
             args = line.split(' ')
-            network.addRoad(args[1], args[2], args[3])
+            network.addRoad(int(args[1]), int(args[2]), float(args[3]))
