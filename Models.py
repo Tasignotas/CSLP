@@ -89,3 +89,17 @@ class Network:
         originID = self.stops.keys()[randint(0, len(self.stops)-1)]
         destID = choice(self.stops[originID].reachableStops())
         self.stops[originID].passengers.append(Passenger(destID))
+
+        
+    def getPaxRTB(self):
+        ''' This method gets all passengers that are in a stop, the bus
+        at the front of the bus queue suits them and is not full'''
+        paxRTB = []
+        for stop in self.stops:
+            for pax in self.stops[stop].passengers:
+                firstBus = self.stops[stop].qOfBusses[0]
+                if firstBus:
+                    if (pax.destStopID in self.routes[firstBus.routeID].stopSequence) and (len(firstBus.passengers) < firstBus.capacity):
+                        paxRTB.append((pax, bus))
+        return paxRTB
+       
