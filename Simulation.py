@@ -59,4 +59,12 @@ class Simulation:
             self.Network.arriveBus()
         else:
             self.Network.addPassenger()
+
+
+if __name__ == '__main__':
+    simulation = Simulation()
+    fileName = raw_input('Please enter the name of the input file: ')
+    network = Parser.Parser.parseFile(fileName, simulation)
+    simulation.Network = network
+    simulation.execute_simulation_loop()
     
