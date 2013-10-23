@@ -3,6 +3,7 @@ This class will perform events on the constructed bus network: it will simulate
 passenger and bus movement/queueing in the network
 '''
 import Parser
+import Models
 from random import uniform
 from math import log10
 
@@ -20,9 +21,9 @@ class Simulation:
         while currentTime <= self.stopTime:
             # Getting all of the events that could occur:
             rates = self.getEventRates()
-            totalRate = (self.newPassRatio + rates[paxRTBRate] +
-                         rates[paxRTDRate] + rates[busesRTARate] +
-                         rates[busesRTLRate])
+            totalRate = (self.newPassRatio + rates['paxRTBRate'] +
+                         rates['paxRTDRate'] + rates['busesRTARate'] +
+                         rates['busesRTDRate'])
             delay = -(1.0/totalRate) * log10(uniform(0.0, 1.0))
             self.executeNextEvent(totalRate, rates)
             currentTime += delay
@@ -32,28 +33,30 @@ class Simulation:
         ''' This method gets rates needed for choosing the event to execute'''
         rates = {}
         # Passengers ready to board rate:
-        rates[paxRTBRate] = len(self.Network.getPaxRTB()) * self.boardRatio
+        rates['paxRTBRate'] = len(self.Network.getPaxRTB()) * self.boardRatio
         # Passengers ready to disembark rate:
-        rates[paxRTDRate] = len(self.Network.getPaxRTD()) * self.disembarksRatio
+        rates['paxRTDRate'] = len(self.Network.getPaxRTD()) * self.disembarksRatio
         # Buses ready to depart rate:
-        rates[busesRTDRate] = len(self.Network.getBusesRTD()) * self.depRatio
+        rates['busesRTDRate'] = len(self.Network.getBusesRTD()) * self.depRatio
         # Buses ready to arrive rate:
-        rates[busesRTARate] = sum([self.Network.getThroughput(bus) for bus in self.Network.getBusesRTA()])
+        rates['busesRTARate'] = sum([self.Network.getThroughput(bus) for bus in self.Network.getBusesRTA()])
+        print rates
         return rates
 
 
     def executeNextEvent(self, totalRate, rates):
         ''' This method chooses and executes an event, based on event rates'''
         choice = uniform(0, totalRate)
-        if choice < rates[paxRTBRate]:
+        if choice < rates['paxRTBRate']:
             self.Network.boardPassenger()
-        elif choice < (rates[paxRTBRate] + rates[paxRTDRate]):
+        elif choice < (rates['paxRTBRate'] + rates['paxRTDRate']):
             self.Network.disembarkPassenger()
-        elif choice < (rates[paxRTBRate] + rates[paxRTDRate] +
-                       rates[busesRTDRate]):
+        elif choice < (rates['paxRTBRate'] + rates['paxRTDRate'] +
+                       rates['busesRTDRate']):
             self.Network.departBus()
-        elif choice < (rates[paxRTBRate] + rates[paxRTDRate] +
-                       rates[busesRTDRate] + rates[busesRTARate]):
+        elif choice < (rates['paxRTBRate'] + rates['paxRTDRate'] +
+                       rates['busesRTDRate'] + rates['busesRTARate']):
             self.Network.arriveBus()
         else:
-            self.Netowrk.addPassenger()
+            self.Network.addPassenger()
+    
