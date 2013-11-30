@@ -2,8 +2,6 @@
 This file contains class descriptions for all kinds of objects
 used in the simulation to mimic the real world: stops, roads, passengers and etc.
 '''
-
-
 from random import randint, choice
 
 
@@ -22,7 +20,7 @@ class Bus:
         self.status = 'Queueing'
         self.location = location
         self.passengers = []
-        
+
         
 class Stop:
     ''' A class representing a bus stop in the bus network'''
@@ -30,14 +28,15 @@ class Stop:
         self.stopID = stopID
         self.qOfBusses = []
         self.passengers = []
-        self.reachableStops = {}
+        self.reachableStops = []
     
     
     def addReachableStops(self, reachableStops):
         ''' Method that adds new stops to the set of reachable stops'''
         for stop in reachableStops:
             if not (stop in self.reachableStops) and not (self.stopID == stop):
-                self.reachableStops.add(stop)
+                self.reachableStops.append(stop)
+
                 
     
 class Route:
@@ -66,7 +65,7 @@ class Network:
         self.routes = {}
         self.stops = {}
         self.roads = {}
-    
+        
     
     def addRoad(self, stop1, stop2, throughput):
         ''' This method adds a road with specified throughput between two stops,
@@ -92,7 +91,7 @@ class Network:
     def addPassenger(self):
         ''' This method adds a passenger to the bus network'''
         originID = self.stops.keys()[randint(0, len(self.stops)-1)]
-        destID = choice(self.stops[originID].reachableStops())
+        destID = choice(self.stops[originID].reachableStops)
         self.stops[originID].passengers.append(Passenger(destID))
 
         
