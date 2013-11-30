@@ -26,7 +26,7 @@ class Stop:
     ''' A class representing a bus stop in the bus network'''
     def __init__(self, stopID):
         self.stopID = stopID
-        self.qOfBusses = []
+        self.qOfBuses = []
         self.passengers = []
         self.reachableStops = []
     
@@ -40,7 +40,7 @@ class Stop:
 
     def addBus(self, bus):
         ''' Method that adds a bus to the stop's queue'''
-        self.qOfBusses.append(bus)
+        self.qOfBuses.append(bus)
                 
     
 class Route:
@@ -49,18 +49,18 @@ class Route:
         self.routeID = routeID
         self.stopSequence = stopSequence
         self.capacity = capacity
-        self.busses = []
+        self.buses = []
 
 
     def addBus(self, bus):
         ''' This method adds the given bus to the route'''
-        self.busses.append(bus)
+        self.buses.append(bus)
         
         
     def getNewBus(self):
         ''' This method creates a new bus for the route'''
-        location = self.stopSequence[len(self.busses) % len(self.stopSequence)]
-        return Bus(self.routeID, len(self.busses), self.capacity, location)
+        location = self.stopSequence[len(self.buses) % len(self.stopSequence)]
+        return Bus(self.routeID, len(self.buses), self.capacity, location)
         
 
     def getNextStop(self, currentStopID):
@@ -85,7 +85,7 @@ class Network:
 
 
     def addRoute(self, routeID, stopIDs, busCount, capacity):
-        ''' This method adds a route with its busses and stops to the network'''
+        ''' This method adds a route with its buses and stops to the network'''
         # Adding new stops to the network:
         for i in stopIDs:
             if not (i in self.stops.keys()):
@@ -93,7 +93,7 @@ class Network:
             self.stops[i].addReachableStops(stopIDs)
         # Adding new route:
         self.routes[routeID] = Route(stopIDs, routeID, capacity)
-        # Adding busses to the route:
+        # Adding buses to the route:
         for i in range(0, busCount):
             bus = self.routes[routeID].getNewBus()
             self.routes[routeID].addBus(bus)
@@ -114,8 +114,8 @@ class Network:
         paxRTB = []
         for stop in self.stops.values():
             for pax in stop.passengers:
-                if stop.qOfBusses:
-                    firstBus = stop.qOfBusses[0]
+                if stop.qOfBuses:
+                    firstBus = stop.qOfBuses[0]
                     print pax.destStopID
                     print self.routes[firstBus.routeID].stopSequence
                     if (pax.destStopID in self.routes[firstBus.routeID].stopSequence) and (len(firstBus.passengers) < firstBus.capacity):
@@ -128,7 +128,7 @@ class Network:
         to get off the bus. Also, the bus is at a bus stop'''
         paxRTD = []
         for stop in self.stops.values():
-            for bus in stop.qOfBusses:
+            for bus in stop.qOfBuses:
                 for pax in bus.passengers:
                     if (pax.destStopID == bus.location) and (bus.status == 'Queueing'):
                         paxRTD.append((pax, bus))
@@ -136,11 +136,11 @@ class Network:
 
 
     def getBusesRTD(self):
-        ''' This method gets all of the busses that are ready to depart from
+        ''' This method gets all of the buses that are ready to depart from
         the stop that they are located'''
         busesRTD = []
         for stop in self.stops.values():
-            for bus in stop.qOfBusses:
+            for bus in stop.qOfBuses:
                 noneToDisembark = True
                 noneToBoard = True
                 # Checking if there is any passenger that wants to get onboard:
@@ -157,11 +157,11 @@ class Network:
 
 
     def getBusesRTA(self):
-        ''' This method gets all of the busses that are ready to arrive at
+        ''' This method gets all of the buses that are ready to arrive at
         the stop that they are located at'''
         busesRTA = []
         for route in self.routes.values():
-            for bus in route.busses:
+            for bus in route.buses:
                 if bus.status == 'Moving':
                     busesRTA.append((bus, route))
         return busesRTA
