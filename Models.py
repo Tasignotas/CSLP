@@ -160,7 +160,7 @@ class Network:
         ''' This method gets all of the busses that are ready to arrive at
         the stop that they are located at'''
         busesRTA = []
-        for route in self.routes:
+        for route in self.routes.values():
             for bus in route.busses:
                 if bus.status == 'Moving':
                     busesRTA.append((bus, route))
