@@ -87,11 +87,9 @@ class Network:
     def addRoute(self, routeID, stopIDs, busCount, capacity):
         ''' This method adds a route with its busses and stops to the network'''
         # Adding new stops to the network:
-        for i in stopIDs.split(' '):
+        for i in stopIDs:
             if not (i in self.stops.keys()):
                 self.stops[i] = Stop(i)
-            self.stops[i].addReachableStops(stopIDs.split(' '))
-    
             self.stops[i].addReachableStops(stopIDs)
         # Adding new route:
         self.routes[routeID] = Route(stopIDs, routeID, capacity)
@@ -113,10 +111,12 @@ class Network:
         ''' This method gets all passengers that are in a stop, the bus
         at the front of the bus queue suits them and is not full'''
         paxRTB = []
-        for stop in self.stops:
-            for pax in self.stops[stop].passengers:
-                firstBus = self.stops[stop].qOfBusses[0]
-                if firstBus:
+        for stop in self.stops.values():
+            for pax in stop.passengers:
+                if stop.qOfBusses:
+                    firstBus = stop.qOfBusses[0]
+                    print pax.destStopID
+                    print self.routes[firstBus.routeID].stopSequence
                     if (pax.destStopID in self.routes[firstBus.routeID].stopSequence) and (len(firstBus.passengers) < firstBus.capacity):
                         paxRTB.append((pax, bus))
         return paxRTB
@@ -126,18 +126,19 @@ class Network:
         ''' This method gets all passengers that are in a bus, but would like
         to get off the bus. Also, the bus is at a bus stop'''
         paxRTD = []
-        for stop in self.stops:
+        for stop in self.stops.values():
             for bus in stop.qOfBusses:
                 for pax in bus.passengers:
                     if (pax.destStopID == bus.location) and (bus.status == 'Queueing'):
                         paxRTD.append((pax, bus))
+        return paxRTD
 
 
     def getBusesRTD(self):
         ''' This method gets all of the busses that are ready to depart from
         the stop that they are located'''
         busesRTD = []
-        for stop in self.stops:
+        for stop in self.stops.values():
             for bus in stop.qOfBusses:
                 noneToDisembark = True
                 noneToBoard = True
