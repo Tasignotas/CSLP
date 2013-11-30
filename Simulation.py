@@ -7,6 +7,7 @@ import Models
 from random import uniform
 from math import log10
 
+
 class Simulation:
     ''' A class that controls the entire simulation and performs events using
     the constructed bus network'''
