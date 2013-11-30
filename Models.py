@@ -37,6 +37,10 @@ class Stop:
             if not (stop in self.reachableStops) and not (self.stopID == stop):
                 self.reachableStops.append(stop)
 
+
+    def addBus(self, bus):
+        ''' Method that adds a bus to the stop's queue'''
+        self.qOfBusses.append(bus)
                 
     
 class Route:
@@ -47,11 +51,16 @@ class Route:
         self.capacity = capacity
         self.busses = []
 
-    def addBus(self):
-        ''' This method adds a new bus to the route'''
-        location = len(self.busses) % len(self.stopSequence)
-        self.busses.append(Bus(self.routeID, len(self.busses), self.capacity,
-                           location))
+
+    def addBus(self, bus):
+        ''' This method adds the given bus to the route'''
+        self.busses.append(bus)
+        
+        
+    def getNewBus(self):
+        ''' This method creates a new bus for the route'''
+        location = self.stopSequence[len(self.busses) % len(self.stopSequence)]
+        return Bus(self.routeID, len(self.busses), self.capacity, location)
         
 
     def getNextStop(self, currentStopID):
@@ -77,16 +86,21 @@ class Network:
 
     def addRoute(self, routeID, stopIDs, busCount, capacity):
         ''' This method adds a route with its busses and stops to the network'''
-        self.routes[routeID] = Route(stopIDs.split(' '), routeID, capacity)
-        # Adding busses to the route:
-        for i in range(0, busCount):
-            self.routes[routeID].addBus()
         # Adding new stops to the network:
         for i in stopIDs.split(' '):
             if not (i in self.stops.keys()):
                 self.stops[i] = Stop(i)
             self.stops[i].addReachableStops(stopIDs.split(' '))
     
+            self.stops[i].addReachableStops(stopIDs)
+        # Adding new route:
+        self.routes[routeID] = Route(stopIDs, routeID, capacity)
+        # Adding busses to the route:
+        for i in range(0, busCount):
+            bus = self.routes[routeID].getNewBus()
+            self.routes[routeID].addBus(bus)
+            self.stops[bus.location].addBus(bus)
+
     
     def addPassenger(self):
         ''' This method adds a passenger to the bus network'''
