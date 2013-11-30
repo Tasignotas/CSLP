@@ -2,7 +2,9 @@
 This file contains class descriptions for all kinds of objects
 used in the simulation to mimic the real world: stops, roads, passengers and etc.
 '''
-from random import randint, choice
+import random
+
+
 
 
 class Passenger:
@@ -74,6 +76,7 @@ class Network:
         self.routes = {}
         self.stops = {}
         self.roads = {}
+        random.seed(0)
         
     
     def addRoad(self, stop1, stop2, throughput):
@@ -102,8 +105,8 @@ class Network:
     
     def addPassenger(self):
         ''' This method adds a passenger to the bus network'''
-        originID = self.stops.keys()[randint(0, len(self.stops)-1)]
-        destID = choice(self.stops[originID].reachableStops)
+        originID = self.stops.keys()[random.randint(0, len(self.stops)-1)]
+        destID = random.choice(self.stops[originID].reachableStops)
         self.stops[originID].passengers.append(Passenger(destID))
         print 'A new passenger enters at stop {0} with destination {1} at time'.format(originID, destID)
 
@@ -175,7 +178,7 @@ class Network:
     def boardPassenger(self):
         ''' This method adds a random passenger to the bus
         that he wishes to board'''
-        (rand_pax, rand_bus) = choice(self.getPaxRTB())
+        (rand_pax, rand_bus) = random.choice(self.getPaxRTB())
         rand_bus.passengers.append(rand_pax)
         self.stops[rand_bus.location].passengers.pop(self.stops[rand_bus.location].passengers.index(rand_pax))
         print 'Passenger boards bus {0} at stop {1} with destination {2} at time'.format((rand_bus.routeID + '' + rand_bus.busNumber), rand_bus.location, rand_pax.destStopID)
@@ -183,14 +186,14 @@ class Network:
         
     def disembarkPassenger(self):
         ''' This method disembarks a random passenger from the bus that he's in'''
-        (rand_pax, rand_bus) = choice(self.getPaxRTD())
+        (rand_pax, rand_bus) = random.choice(self.getPaxRTD())
         rand_bus.passengers.pop(rand_bus.passengers.index(rand_pax))
         print 'Passenger disembarks bus {0} at stop {1} at time'.format((rand_bus.routeID + '' + rand_bus.busNumber), rand_bus.location)
         
 
     def departBus(self):
         ''' This method departs a random bus that's ready to depart'''
-        (rand_bus, rand_stop) = choice(self.getBusesRTD())
+        (rand_bus, rand_stop) = random.choice(self.getBusesRTD())
         rand_stop.qOfBuses.pop(rand_stop.qOfBuses.index(rand_bus))
         rand_bus.status = 'Moving'
         print 'Bus {0} leaves stop {1} at time'.format(str(rand_bus.routeID) + '.' + str(rand_bus.busNumber), rand_bus.location)
@@ -198,9 +201,9 @@ class Network:
 
     def arriveBus(self):
         ''' This method makes a random bus that's ready to arrive to arrive'''
-        (rand_bus, rand_route) = choice(self.getBusesRTA())
+        (rand_bus, rand_route) = random.choice(self.getBusesRTA())
         next_stop_id = rand_route.getNextStop(rand_bus.location)
         rand_bus.location = next_stop_id
         rand_bus.state = 'Queueing'
         self.stops[next_stop_id].qOfBuses.append(rand_bus)
-        print 'Bus {0} arrives at stop {1} at time'.format((rand_bus.routeID + '' + rand_bus.busNumber), next_stop_id)
+        print 'Bus {0} arrives at stop {1} at time'.format(str(rand_bus.routeID) + '.' + str(rand_bus.busNumber), next_stop_id)
