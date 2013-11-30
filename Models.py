@@ -107,6 +107,13 @@ class Network:
         self.stops[originID].passengers.append(Passenger(destID))
         print 'A new passenger enters at stop {0} with destination {1} at time'.format(originID, destID)
 
+    
+    def getThroughput(self, bus):
+        ''' This method gets the throughput of the road segment
+            that the bus is currently on '''
+        originStopID = bus.location
+        destinationStopID = self.routes[bus.routeID].getNextStop(originStopID)
+        return self.roads[originStopID][destinationStopID]
         
     def getPaxRTB(self):
         ''' This method gets all passengers that are in a stop, the bus
