@@ -116,8 +116,6 @@ class Network:
             for pax in stop.passengers:
                 if stop.qOfBuses:
                     firstBus = stop.qOfBuses[0]
-                    print pax.destStopID
-                    print self.routes[firstBus.routeID].stopSequence
                     if (pax.destStopID in self.routes[firstBus.routeID].stopSequence) and (len(firstBus.passengers) < firstBus.capacity):
                         paxRTB.append((pax, bus))
         return paxRTB
@@ -188,7 +186,7 @@ class Network:
         (rand_bus, rand_stop) = choice(self.getBusesRTD())
         rand_stop.qOfBuses.pop(rand_stop.qOfBuses.index(rand_bus))
         rand_bus.status = 'Moving'
-        print 'Bus {0} leaves stop {1} at time'.format((rand_bus.routeID + '' + rand_bus.busNumber), rand_bus.location)
+        print 'Bus {0} leaves stop {1} at time'.format(str(rand_bus.routeID) + '.' + str(rand_bus.busNumber), rand_bus.location)
 
 
     def arriveBus(self):
