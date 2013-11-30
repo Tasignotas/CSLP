@@ -40,7 +40,7 @@ class Simulation:
         # Buses ready to depart rate:
         rates['busesRTDRate'] = len(self.Network.getBusesRTD()) * self.depRatio
         # Buses ready to arrive rate:
-        rates['busesRTARate'] = sum([self.Network.getThroughput(bus) for bus in self.Network.getBusesRTA()])
+        rates['busesRTARate'] = sum([self.Network.getThroughput(bus) for (bus, route) in self.Network.getBusesRTA()])
         print rates
         return rates
 
