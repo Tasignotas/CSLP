@@ -204,6 +204,6 @@ class Network:
         (rand_bus, rand_route) = random.choice(self.getBusesRTA())
         next_stop_id = rand_route.getNextStop(rand_bus.location)
         rand_bus.location = next_stop_id
-        rand_bus.state = 'Queueing'
+        rand_bus.status = 'Queueing'
         self.stops[next_stop_id].qOfBuses.append(rand_bus)
         print 'Bus {0} arrives at stop {1} at time'.format(str(rand_bus.routeID) + '.' + str(rand_bus.busNumber), next_stop_id)
