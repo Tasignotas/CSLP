@@ -127,7 +127,7 @@ class Network:
                 if stop.qOfBuses:
                     firstBus = stop.qOfBuses[0]
                     if (pax.destStopID in self.routes[firstBus.routeID].stopSequence) and (len(firstBus.passengers) < firstBus.capacity):
-                        paxRTB.append((pax, bus))
+                        paxRTB.append((pax, firstBus))
         return paxRTB
 
 
