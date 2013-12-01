@@ -26,7 +26,7 @@ class Simulation:
                          rates['paxRTDRate'] + rates['busesRTARate'] +
                          rates['busesRTDRate'])
             delay = -(1.0/totalRate) * log10(uniform(0.0, 1.0))
-            self.executeNextEvent(totalRate, rates)
+            self.executeNextEvent(totalRate, rates, currentTime)
             currentTime += delay
 
 
@@ -45,21 +45,21 @@ class Simulation:
         return rates
 
 
-    def executeNextEvent(self, totalRate, rates):
+    def executeNextEvent(self, totalRate, rates, time):
         ''' This method chooses and executes an event, based on event rates'''
         choice = uniform(0, totalRate)
         if choice < rates['paxRTBRate']:
-            self.Network.boardPassenger()
+            self.Network.boardPassenger(time)
         elif choice < (rates['paxRTBRate'] + rates['paxRTDRate']):
-            self.Network.disembarkPassenger()
+            self.Network.disembarkPassenger(time)
         elif choice < (rates['paxRTBRate'] + rates['paxRTDRate'] +
                        rates['busesRTDRate']):
-            self.Network.departBus()
+            self.Network.departBus(time)
         elif choice < (rates['paxRTBRate'] + rates['paxRTDRate'] +
                        rates['busesRTDRate'] + rates['busesRTARate']):
-            self.Network.arriveBus()
+            self.Network.arriveBus(time)
         else:
-            self.Network.addPassenger()
+            self.Network.addPassenger(time)
 
 
 if __name__ == '__main__':
