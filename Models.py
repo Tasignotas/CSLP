@@ -181,14 +181,14 @@ class Network:
         (rand_pax, rand_bus) = random.choice(self.getPaxRTB())
         rand_bus.passengers.append(rand_pax)
         self.stops[rand_bus.location].passengers.pop(self.stops[rand_bus.location].passengers.index(rand_pax))
-        print 'Passenger boards bus {0} at stop {1} with destination {2} at time'.format((rand_bus.routeID + '' + rand_bus.busNumber), rand_bus.location, rand_pax.destStopID)
+        print 'Passenger boards bus {0} at stop {1} with destination {2} at time'.format(str(rand_bus.routeID) + '.' + str(rand_bus.busNumber), rand_bus.location, rand_pax.destStopID)
         
         
     def disembarkPassenger(self):
         ''' This method disembarks a random passenger from the bus that he's in'''
         (rand_pax, rand_bus) = random.choice(self.getPaxRTD())
         rand_bus.passengers.pop(rand_bus.passengers.index(rand_pax))
-        print 'Passenger disembarks bus {0} at stop {1} at time'.format((rand_bus.routeID + '' + rand_bus.busNumber), rand_bus.location)
+        print 'Passenger disembarks bus {0} at stop {1} at time'.format(str(rand_bus.routeID) + '.' + str(rand_bus.busNumber), rand_bus.location)
         
 
     def departBus(self):
