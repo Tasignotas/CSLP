@@ -4,6 +4,7 @@ passenger and bus movement/queueing in the network
 '''
 import Parser
 import Models
+import warnings
 from random import uniform
 from math import log10
 
@@ -60,12 +61,38 @@ class Simulation:
             self.Network.arriveBus(time)
         else:
             self.Network.addPassenger(time)
+            
+    
+    def validateAndLoadNetwork(self, network):
+        ''' This method checks if simulation's bus network is valid or not '''
+        warnings.simplefilter('always' if self.ignoreWarnings else 'error')
+        # Checking if all routes have roads defined and they are positive:
+        for route in network.routes.values():
+            for stop1 in route.stopSequence:
+                stop2 = route.getNextStop(stop1)
+                try:
+                    if network.roads[stop1][stop2] <= 0:
+                        raise Exception('The road throughput between stops {0} and {1} is <= 0'.format(stop1, stop2))
+                except KeyError:
+                    raise Exception('The road between stops {0} and {1} is undefined'.format(stop1, stop2))
+        # Checking if all roads are in some route:
+        for depStop in network.roads:
+            for destStop in network.roads[depStop]:
+                roadUsed = False
+                for route in network.routes.values():
+                    for stop1 in route.stopSequence:
+                        if depStop == stop1 and destStop == route.getNextStop(stop1):
+                            roadUsed = True
+                if not roadUsed:
+                    warnings.warn('Road between stops {0} and {1} is specified but not used'.format(depStop, destStop))
+        # If no errors were raised, we load the network for the simulation:
+        self.Network = network
 
 
 if __name__ == '__main__':
     simulation = Simulation()
     fileName = raw_input('Please enter the name of the input file: ')
     network = Parser.Parser.parseFile(fileName, simulation)
-    simulation.Network = network
+    simulation.validateAndLoadNetwork(network)
     simulation.execute_simulation_loop()
     
