@@ -32,21 +32,25 @@ class Parser:
                 simulation.boardRatioList = [float(number) for number in (line.split(' ')[2:])]
             else:
                 simulation.boardRatioList = [float(line.split(' ')[1])]
+            simulation.boardRatio = simulation.boardRatioList[0]
         elif line.startswith('disembarks'):
             if 'experiment' in line:
                 simulation.disembarksRatioList = [float(number) for number in (line.split(' ')[2:])]
             else:
                 simulation.disembarksRatioList = [float(line.split(' ')[1])]
+            simulation.disembarksRatio = simulation.disembarksRatioList[0]
         elif line.startswith('departs'):
             if 'experiment' in line:
                 simulation.depRatioList = [float(number) for number in (line.split(' ')[2:])]
             else:
                 simulation.depRatioList = [float(line.split(' ')[1])]
+            simulation.depRatio = simulation.depRatioList[0]
         elif line.startswith('new passengers'):
             if 'experiment' in line:
                 simulation.newPassRatioList = [float(number) for number in (line.split(' ')[3:])]
             else:
                 simulation.newPassRatioList = [float(line.split(' ')[2])]
+            simulation.newPassRatio = simulation.newPassRatioList[0]
         elif line.startswith('stop time'):
                 simulation.stopTime = float(line.split(' ')[2])
         elif line.startswith('ignore warnings'):
