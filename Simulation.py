@@ -59,7 +59,7 @@ class Simulation:
             self.print_statistics()
             
 
-    def execute_simulation_loop(self):
+    def execute_simulation_loop(self, outputEvents=True):
         ''' This method implements the main simulation loop '''
         currentTime = 0
         while currentTime <= self.stopTime:
@@ -69,7 +69,7 @@ class Simulation:
                          rates['paxRTDRate'] + rates['busesRTARate'] +
                          rates['busesRTDRate'])
             delay = -(1.0/totalRate) * log10(uniform(0.0, 1.0))
-            self.executeNextEvent(totalRate, rates, currentTime)
+            self.executeNextEvent(totalRate, rates, currentTime, outputEvents)
             currentTime += delay
 
 
@@ -88,21 +88,21 @@ class Simulation:
         return rates
 
 
-    def executeNextEvent(self, totalRate, rates, time):
+    def executeNextEvent(self, totalRate, rates, time, outputEvents):
         ''' This method chooses and executes an event, based on event rates'''
         choice = uniform(0, totalRate)
         if choice < rates['paxRTBRate']:
-            self.Network.boardPassenger(time)
+            self.Network.boardPassenger(time, outputEvents)
         elif choice < (rates['paxRTBRate'] + rates['paxRTDRate']):
-            self.Network.disembarkPassenger(time)
+            self.Network.disembarkPassenger(time, outputEvents)
         elif choice < (rates['paxRTBRate'] + rates['paxRTDRate'] +
                        rates['busesRTDRate']):
-            self.Network.departBus(time)
+            self.Network.departBus(time, outputEvents)
         elif choice < (rates['paxRTBRate'] + rates['paxRTDRate'] +
                        rates['busesRTDRate'] + rates['busesRTARate']):
-            self.Network.arriveBus(time)
+            self.Network.arriveBus(time, outputEvents)
         else:
-            self.Network.addPassenger(time)
+            self.Network.addPassenger(time, outputEvents)
             
     
     def validateAndLoadNetwork(self, network):

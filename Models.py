@@ -103,12 +103,13 @@ class Network:
             self.stops[bus.location].addBus(bus)
 
     
-    def addPassenger(self, time):
+    def addPassenger(self, time, outputEvent):
         ''' This method adds a passenger to the bus network'''
         originID = self.stops.keys()[random.randint(0, len(self.stops)-1)]
         destID = random.choice(self.stops[originID].reachableStops)
         self.stops[originID].passengers.append(Passenger(destID))
-        print 'A new passenger enters at stop {0} with destination {1} at time {2}'.format(originID, destID, time)
+        if outputEvent:
+            print 'A new passenger enters at stop {0} with destination {1} at time {2}'.format(originID, destID, time)
 
     
     def getThroughput(self, bus):
@@ -175,35 +176,39 @@ class Network:
         return busesRTA
 
     
-    def boardPassenger(self, time):
+    def boardPassenger(self, time, outputEvent):
         ''' This method adds a random passenger to the bus
         that he wishes to board'''
         (rand_pax, rand_bus) = random.choice(self.getPaxRTB())
         rand_bus.passengers.append(rand_pax)
         self.stops[rand_bus.location].passengers.pop(self.stops[rand_bus.location].passengers.index(rand_pax))
-        print 'Passenger boards bus {0} at stop {1} with destination {2} at time {3}'.format(str(rand_bus.routeID) + '.' + str(rand_bus.busNumber), rand_bus.location, rand_pax.destStopID, time)
+        if outputEvent:
+            print 'Passenger boards bus {0} at stop {1} with destination {2} at time {3}'.format(str(rand_bus.routeID) + '.' + str(rand_bus.busNumber), rand_bus.location, rand_pax.destStopID, time)
         
         
-    def disembarkPassenger(self, time):
+    def disembarkPassenger(self, time, outputEvent):
         ''' This method disembarks a random passenger from the bus that he's in'''
         (rand_pax, rand_bus) = random.choice(self.getPaxRTD())
         rand_bus.passengers.pop(rand_bus.passengers.index(rand_pax))
-        print 'Passenger disembarks bus {0} at stop {1} at time {2}'.format(str(rand_bus.routeID) + '.' + str(rand_bus.busNumber), rand_bus.location, time)
+        if outputEvent:
+            print 'Passenger disembarks bus {0} at stop {1} at time {2}'.format(str(rand_bus.routeID) + '.' + str(rand_bus.busNumber), rand_bus.location, time)
         
 
-    def departBus(self, time):
+    def departBus(self, time, outputEvent):
         ''' This method departs a random bus that's ready to depart'''
         (rand_bus, rand_stop) = random.choice(self.getBusesRTD())
         rand_stop.qOfBuses.pop(rand_stop.qOfBuses.index(rand_bus))
         rand_bus.status = 'Moving'
-        print 'Bus {0} leaves stop {1} at time {2}'.format(str(rand_bus.routeID) + '.' + str(rand_bus.busNumber), rand_bus.location, time)
+        if outputEvent:
+            print 'Bus {0} leaves stop {1} at time {2}'.format(str(rand_bus.routeID) + '.' + str(rand_bus.busNumber), rand_bus.location, time)
 
 
-    def arriveBus(self, time):
+    def arriveBus(self, time, outputEvent):
         ''' This method makes a random bus that's ready to arrive to arrive'''
         (rand_bus, rand_route) = random.choice(self.getBusesRTA())
         next_stop_id = rand_route.getNextStop(rand_bus.location)
         rand_bus.location = next_stop_id
         rand_bus.status = 'Queueing'
         self.stops[next_stop_id].qOfBuses.append(rand_bus)
-        print 'Bus {0} arrives at stop {1} at time {2}'.format(str(rand_bus.routeID) + '.' + str(rand_bus.busNumber), next_stop_id, time)
+        if outputEvent:
+            print 'Bus {0} arrives at stop {1} at time {2}'.format(str(rand_bus.routeID) + '.' + str(rand_bus.busNumber), next_stop_id, time)
