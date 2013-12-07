@@ -7,6 +7,7 @@ import Models
 import warnings
 from random import uniform
 from math import log10
+from copy import deepcopy
 
 
 class Simulation:
@@ -19,7 +20,26 @@ class Simulation:
         
     def execute_experimentation(self):
         ''' This method performs experimentation over all parameter values'''
-        pass
+        initialNetwork = deepcopy(self.Network)
+        for boardRatio in self.boardRatioList:
+            self.boardRatio = boardRatio
+            if len(self.boardRatioList) != 1:
+                print 'board {0}'.format(boardRatio)
+            for disembarksRatio in self.disembarksRatioList:
+                self.disembarksRatio = disembarksRatio
+                if len(self.disembarksRatioList) != 1:
+                    print 'disembarks {0}'.format(disembarksRatio)
+                for depRatio in self.depRatioList:
+                    self.depRatio = depRatio
+                    if len(self.depRatioList) != 1:
+                        print 'departs {0}'.format(depRatio)
+                    for newPassRatio in self.newPassRatioList:
+                        self.newPassRatio = newPassRatio
+                        if len(self.newPassRatioList) != 1:
+                            print 'new passengers {0}'.format(newPassRatio)
+                        self.execute_simulation_loop()
+                        self.print_statistics()
+                        self.Network = deepcopy(initialNetwork)
                             
     
     def print_statistics(self):
