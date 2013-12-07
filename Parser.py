@@ -28,15 +28,27 @@ class Parser:
         the network and simulation objects'''
         # Parsing arguments that affect the simulation object:
         if line.startswith('board'):
-            simulation.boardRatio = float(line.split(' ')[1])
+            if 'experiment' in line:
+                simulation.boardRatioList = [float(number) for number in (line.split(' ')[2:])]
+            else:
+                simulation.boardRatioList = [float(line.split(' ')[1])]
         elif line.startswith('disembarks'):
-            simulation.disembarksRatio = float(line.split(' ')[1])
+            if 'experiment' in line:
+                simulation.disembarksRatioList = [float(number) for number in (line.split(' ')[2:])]
+            else:
+                simulation.disembarksRatioList = [float(line.split(' ')[1])]
         elif line.startswith('departs'):
-            simulation.depRatio = float(line.split(' ')[1])
+            if 'experiment' in line:
+                simulation.depRatioList = [float(number) for number in (line.split(' ')[2:])]
+            else:
+                simulation.depRatioList = [float(line.split(' ')[1])]
         elif line.startswith('new passengers'):
-            simulation.newPassRatio = float(line.split(' ')[2])
+            if 'experiment' in line:
+                simulation.newPassRatioList = [float(number) for number in (line.split(' ')[3:])]
+            else:
+                simulation.newPassRatioList = [float(line.split(' ')[2])]
         elif line.startswith('stop time'):
-            simulation.stopTime = float(line.split(' ')[2])
+                simulation.stopTime = float(line.split(' ')[2])
         elif line.startswith('ignore warnings'):
             simulation.ignoreWarnings = True
         elif line.startswith('optimise parameters'):
