@@ -15,7 +15,29 @@ class Simulation:
     def __init__(self):
         self.ignoreWarnings = False
         self.optimiseParameters = False
+        
+        
+    def execute_experimentation(self):
+        ''' This method performs experimentation over all parameter values'''
+        pass
+                            
+    
+    def print_statistics(self):
+        ''' Method that prints the statistics of the most recent run of the simulation'''
+        print 'Statistics:'
+        
 
+    def execute_simulation(self):
+        ''' This method chooses the right kind of simulation type to be run '''
+        if self.optimiseParameters:
+            self.execute_optimisation()
+        elif (len(self.boardRatioList) * len(simulation.disembarksRatioList) * len(simulation.depRatioList) *
+              len(simulation.newPassRatioList)) > 1:
+            self.execute_experimentation()
+        else:
+            self.execute_simulation_loop()
+            self.print_statistics()
+            
 
     def execute_simulation_loop(self):
         ''' This method implements the main simulation loop '''
@@ -94,5 +116,4 @@ if __name__ == '__main__':
     fileName = raw_input('Please enter the name of the input file: ')
     network = Parser.Parser.parseFile(fileName, simulation)
     simulation.validateAndLoadNetwork(network)
-    simulation.execute_simulation_loop()
-    
+    simulation.execute_simulation()
