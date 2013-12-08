@@ -45,13 +45,23 @@ class Simulation:
     def print_statistics(self):
         ''' Method that prints the statistics of the most recent run of the simulation'''
         # Missed passengers:
-        total = 0
+        total = 0.0
         for stop in self.Network.stops.values():
             print 'number of missed passengers stop {0} {1}'.format(stop.stopID, stop.missedPassengers)
             total += stop.missedPassengers
         for route in self.Network.routes.values():
             print 'number of missed passengers route {0} {1}'.format(route.routeID, route.missedPassengers)
         print 'number of missed passengers {0}'.format(total)
+        # Average number of passengers:
+        total = 0.0
+        for route in self.Network.routes.values():
+            totalPerRoute = 0.0
+            for bus in route.buses:
+                print 'average passengers bus {0}.{1} {2}'.format(bus.routeID, bus.busNumber, bus.averagePassengersTravelling)
+                totalPerRoute += bus.averagePassengersTravelling
+            print 'average passengers route {0} {1}'.format(route.routeID, totalPerRoute/len(route.buses))
+            total += totalPerRoute
+        print 'average passengers {0}'.format(total/len(self.Network.routes))
     
 
     def execute_simulation(self):
