@@ -41,6 +41,43 @@ class Simulation:
                         self.print_statistics()
                         self.Network = deepcopy(initialNetwork)
                             
+                            
+    def execute_optimisation(self):
+        ''' This method performs parameter optimisation'''
+        minCost = None
+        initialNetwork = deepcopy(self.Network)
+        for boardRatio in self.boardRatioList:
+            self.boardRatio = boardRatio
+            for disembarksRatio in self.disembarksRatioList:
+                self.disembarksRatio = disembarksRatio
+                for depRatio in self.depRatioList:
+                    self.depRatio = depRatio
+                    for newPassRatio in self.newPassRatioList:
+                        self.newPassRatio = newPassRatio
+                        if minCost != 0:
+                            self.execute_simulation_loop(outputEvents=False)
+                            # Getting the number of missed passengers:
+                            totalPassengers = 0
+                            for stop in self.Network.stops.values():
+                                totalPassengers += stop.missedPassengers
+                            cost = totalPassengers * (self.boardRatio + self.disembarksRatio + self.depRatio + self.newPassRatio)
+                            if not (minCost) or (minCost > cost):
+                                minCost = cost
+                                params = {'boardRatio' : self.boardRatio,
+                                          'disembarksRatio' : self.disembarksRatio,
+                                          'depRatio' : self.depRatio,
+                                          'newPassRatio' : self.newPassRatio}
+                            self.Network = deepcopy(initialNetwork)
+        print 'Bus network is optimized with setting the parameters as:'
+        if len(self.boardRatioList) > 1:
+            print 'board: {0}'.format(params['boardRatio'])
+        if len(self.disembarksRatioList) > 1:
+            print 'disembarks: {0}'.format(params['disembarksRatio'])
+        if len(self.depRatioList) > 1:
+            print 'departs: {0}'.format(params['depRatio'])
+        if len(self.newPassRatioList) > 1:
+            print 'new passengers: {0}'.format(params['newPassRatio'])
+    
     
     def print_statistics(self):
         ''' Method that prints the statistics of the most recent run of the simulation'''
