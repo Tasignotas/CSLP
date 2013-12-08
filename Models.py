@@ -50,8 +50,7 @@ class Stop:
     def addBus(self, bus):
         ''' Method that adds a bus to the stop's queue'''
         self.qOfBuses.append(bus)
-        if (self.qOfBuses) > 1:
-            self.numberOfBusesQueued += 1
+        self.numberOfBusesQueued += 1
                 
     
 class Route:
@@ -228,8 +227,7 @@ class Network:
         self.calculateQueueingTime(self.stops[next_stop_id], time)
         self.stops[next_stop_id].qOfBuses.append(rand_bus)
         self.stops[next_stop_id].busQChangeTime = time
-        if len(self.stops[next_stop_id].qOfBuses):
-            self.stops[next_stop_id].numberOfBusesQueued += 1
+        self.stops[next_stop_id].numberOfBusesQueued += 1
         if outputEvent:
             print 'Bus {0} arrives at stop {1} at time {2}'.format(str(rand_bus.routeID) + '.' + str(rand_bus.busNumber), next_stop_id, time)
             
