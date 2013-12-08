@@ -31,6 +31,7 @@ class Stop:
         self.qOfBuses = []
         self.passengers = []
         self.reachableStops = []
+        self.missedPassengers = 0
     
     
     def addReachableStops(self, reachableStops):
@@ -52,6 +53,7 @@ class Route:
         self.stopSequence = stopSequence
         self.capacity = capacity
         self.buses = []
+        self.missedPassengers = 0
 
 
     def addBus(self, bus):
@@ -199,6 +201,7 @@ class Network:
         (rand_bus, rand_stop) = random.choice(self.getBusesRTD())
         rand_stop.qOfBuses.pop(rand_stop.qOfBuses.index(rand_bus))
         rand_bus.status = 'Moving'
+        self.calculateMissedPassengers(rand_bus, rand_stop)
         if outputEvent:
             print 'Bus {0} leaves stop {1} at time {2}'.format(str(rand_bus.routeID) + '.' + str(rand_bus.busNumber), rand_bus.location, time)
 
@@ -212,3 +215,15 @@ class Network:
         self.stops[next_stop_id].qOfBuses.append(rand_bus)
         if outputEvent:
             print 'Bus {0} arrives at stop {1} at time {2}'.format(str(rand_bus.routeID) + '.' + str(rand_bus.busNumber), next_stop_id, time)
+            
+            
+    def calculateMissedPassengers(self, bus, stop):
+        ''' This method calculates and adds the missed passengers to the stop and route'''
+        missed = 0
+        stopSequence = self.routes[bus.routeID].stopSequence
+        for pax in stop.passengers:
+            if (pax.destStopID in stopSequence):
+                missed += 1
+        stop.missedPassengers += missed
+        self.routes[bus.routeID].missedPassengers += missed
+        
