@@ -22,7 +22,7 @@ class Bus:
         self.status = 'Queueing'
         self.location = location
         self.passengers = []
-        self.numberOfStops = 0.0
+        self.numberOfStops = 0
         self.averagePassengersTravelling = 0.0
 
         
@@ -33,7 +33,11 @@ class Stop:
         self.qOfBuses = []
         self.passengers = []
         self.reachableStops = []
-        self.missedPassengers = 0.0
+        self.missedPassengers = 0
+        # Attributes for average bus queueing time:
+        self.totalQueueingTime = 0.0
+        self.busQChangeTime = 0.0
+        self.numberOfBusesQueued = 0
     
     
     def addReachableStops(self, reachableStops):
@@ -46,6 +50,8 @@ class Stop:
     def addBus(self, bus):
         ''' Method that adds a bus to the stop's queue'''
         self.qOfBuses.append(bus)
+        if (self.qOfBuses) > 1:
+            self.numberOfBusesQueued += 1
                 
     
 class Route:
@@ -55,7 +61,7 @@ class Route:
         self.stopSequence = stopSequence
         self.capacity = capacity
         self.buses = []
-        self.missedPassengers = 0.0
+        self.missedPassengers = 0
 
 
     def addBus(self, bus):
@@ -122,6 +128,7 @@ class Network:
         originStopID = bus.location
         destinationStopID = self.routes[bus.routeID].getNextStop(originStopID)
         return self.roads[originStopID][destinationStopID]
+        
         
     def getPaxRTB(self):
         ''' This method gets all passengers that are in a stop, the bus
@@ -201,7 +208,10 @@ class Network:
     def departBus(self, time, outputEvent):
         ''' This method departs a random bus that's ready to depart'''
         (rand_bus, rand_stop) = random.choice(self.getBusesRTD())
-        rand_stop.qOfBuses.pop(rand_stop.qOfBuses.index(rand_bus))
+        busPositionInQ = rand_stop.qOfBuses.index(rand_bus)
+        self.calculateQueueingTime(rand_stop, time)
+        rand_stop.busQChangeTime = time
+        rand_stop.qOfBuses.pop(busPositionInQ)
         rand_bus.status = 'Moving'
         self.calculateMissedPassengers(rand_bus, rand_stop)
         self.calculateTravellingPassengers(rand_bus)
@@ -215,7 +225,11 @@ class Network:
         next_stop_id = rand_route.getNextStop(rand_bus.location)
         rand_bus.location = next_stop_id
         rand_bus.status = 'Queueing'
+        self.calculateQueueingTime(self.stops[next_stop_id], time)
         self.stops[next_stop_id].qOfBuses.append(rand_bus)
+        self.stops[next_stop_id].busQChangeTime = time
+        if len(self.stops[next_stop_id].qOfBuses):
+            self.stops[next_stop_id].numberOfBusesQueued += 1
         if outputEvent:
             print 'Bus {0} arrives at stop {1} at time {2}'.format(str(rand_bus.routeID) + '.' + str(rand_bus.busNumber), next_stop_id, time)
             
@@ -236,3 +250,8 @@ class Network:
         bus.averagePassengersTravelling = (bus.averagePassengersTravelling * bus.numberOfStops + len(bus.passengers))/(bus.numberOfStops + 1.0)
         bus.numberOfStops += 1
         
+    
+    def calculateQueueingTime(self, stop, time):
+        ''' This method calculates the total amount of time that the buses have spent queueing in a stop'''
+        if len(stop.qOfBuses) > 0:
+            stop.totalQueueingTime += (time - stop.busQChangeTime) * (len(stop.qOfBuses) - 1)

@@ -62,6 +62,13 @@ class Simulation:
             print 'average passengers route {0} {1}'.format(route.routeID, totalPerRoute/len(route.buses))
             total += totalPerRoute
         print 'average passengers {0}'.format(total/len(self.Network.routes))
+        # Average time spent queueing:
+        total = 0.0
+        for stop in self.Network.stops.values():
+            print 'average queueing at stop {0} {1}'.format(stop.stopID, stop.totalQueueingTime/stop.numberOfBusesQueued)
+            total += stop.totalQueueingTime/stop.numberOfBusesQueued
+        print 'average queueing at all stops {0}'.format(total/len(self.Network.stops))
+        
     
 
     def execute_simulation(self):
