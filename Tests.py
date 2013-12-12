@@ -5,6 +5,7 @@ import unittest
 from mock import Mock
 from mock import patch
 
+
 class ParserTests(unittest.TestCase):
 
     
@@ -66,6 +67,11 @@ class ParserTests(unittest.TestCase):
         Parser.Parser._parseLine('optimise parameters', self.network, self.simulation)
         self.assertEqual(self.simulation.optimiseParameters, True)
 
+
+    def testInvalidLine(self):
+        '''Tests if error is thrown for an invalid input line'''
+        self.assertRaises(Exception, Parser.Parser._parseLine, 'a wrong line', self.network, self.simulation)
+        
 
     def testRoad(self):
         ''' Tests if the road parameters are parsed correctly by the parser:
