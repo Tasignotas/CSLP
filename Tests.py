@@ -72,6 +72,16 @@ class ParserTests(unittest.TestCase):
         '''Tests if error is thrown for an invalid input line'''
         self.assertRaises(Exception, Parser.Parser._parseLine, 'a wrong line', self.network, self.simulation)
         
+    
+    def testCommentOrEmptyLine(self):
+        '''Tests if comments and empty lines are ignored'''
+        Parser.Parser._parseLine('#comment', self.network, self.simulation)
+        self.assertEqual(self.simulation, Simulation.Simulation())
+        self.assertEqual(self.network, Models.Network())
+        Parser.Parser._parseLine('', self.network, self.simulation)
+        self.assertEqual(self.simulation, Simulation.Simulation())
+        self.assertEqual(self.network, Models.Network())
+        
 
     def testRoad(self):
         ''' Tests if the road parameters are parsed correctly by the parser:
