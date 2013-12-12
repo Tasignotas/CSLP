@@ -16,7 +16,17 @@ class Simulation:
     def __init__(self):
         self.ignoreWarnings = False
         self.optimiseParameters = False
-        
+        self.Network = None
+        self.boardRatioList = []
+        self.boardRatio = None
+        self.disembarksRatioList = []
+        self.disembarksRatio = None
+        self.depRatioList = []
+        self.depRatio = None
+        self.newPassRatioList = []
+        self.newPassRatio = []
+        self.stopTime = None
+
         
     def execute_experimentation(self):
         ''' This method performs experimentation over all parameter values'''
