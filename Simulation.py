@@ -8,6 +8,7 @@ import warnings
 from random import uniform
 from math import log10
 from copy import deepcopy
+import itertools
 
 
 class Simulation:
@@ -53,6 +54,12 @@ class Simulation:
             self.params['roads'][(stop1, stop2)] = throughput
         elif throughput != self.params['roads'][(stop1, stop2)]:
             raise Exception('Two different throughputs are specified for the road {0} -> {1}').format(stop1, stop2)
+        
+    
+    def generateRoadSets(self):
+        ''' This method generates all possible route throughput rate combinations'''
+        product = [x for x in apply(itertools.product, self.params['roads'].values())]
+        return [dict(zip(self.params['roads'].keys(), p)) for p in product]
     
         
     def execute_experimentation(self):
