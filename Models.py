@@ -13,6 +13,9 @@ class Passenger:
         self.destStopID = destStopID
         
         
+    def __eq__(self, another):
+        return self.destStopID == another.destStopID    
+        
 class Bus:
     ''' A class representing a bus going on some route in the bus network'''
     def __init__(self, routeID, busNumber, capacity, location):
@@ -24,6 +27,14 @@ class Bus:
         self.passengers = []
         self.numberOfStops = 0
         self.averagePassengersTravelling = 0.0
+
+
+    def __eq__(self, another):
+        return ((self.routeID == another.routeID) and (self.busNumber == another.busNumber) and
+                (self.capacity == another.capacity) and (self.status == another.status) and
+                (self.location == another.location) and (slef.passengers == another.passengers)
+                (self.numberOfStops == another.numberOfStops) and
+                (self.averagePassengersTravelling == another.averagePassengersTravelling))
 
         
 class Stop:
@@ -38,6 +49,15 @@ class Stop:
         self.totalQueueingTime = 0.0
         self.busQChangeTime = 0.0
         self.numberOfBusesQueued = 0
+    
+    
+    def __eq__(self, another):
+        return ((self.stopID == another.stopID) and (self.qOfBuses == another.qOfBuses) and
+                (self.passengers == another.passengers) and (self.reachableStops == self.reachableStops) and
+                (self.missedPassengers == another.missedPassengers) and
+                (self.totalQueueingTime == another.totalQueueingTime) and
+                (self.busQChangeTime == another.busQChangeTime) and
+                (self.numberOfBusesQueued == another.numberOfBusesQueued))
     
     
     def addReachableStops(self, reachableStops):
@@ -61,6 +81,12 @@ class Route:
         self.capacity = capacity
         self.buses = []
         self.missedPassengers = 0
+
+    
+    def __eq__(self, another):
+        return ((self.routeID == another.routeID) and (self.stopSequence == another.stopSequence) and
+                (self.capacity == another.capacity) and (self.buses == another.buses) and
+                (self.missedPassengers == another.missedPassengers))
 
 
     def addBus(self, bus):
@@ -87,6 +113,10 @@ class Network:
         self.roads = {}
         random.seed(0)
         
+    
+    def __eq__(self, another):
+        return ((self.routes == another.routes) and (self.stops == another.stops) and (self.roads == another.roads))
+    
     
     def addRoad(self, stop1, stop2, throughput):
         ''' This method adds a road with specified throughput between two stops,
