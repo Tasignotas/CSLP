@@ -18,12 +18,12 @@ class Parser:
         inputFile = open(inputFileName, 'r')
         network = Network()
         for line in inputFile:
-            Parser.__parseLine(line.strip(), network, simulation)
+            Parser._parseLine(line.strip(), network, simulation)
         return network
 
 
     @staticmethod
-    def __parseLine(line, network, simulation):
+    def _parseLine(line, network, simulation):
         ''' Method for parsing a line of input into a method call that changes
         the network and simulation objects'''
         # Parsing arguments that affect the simulation object:
