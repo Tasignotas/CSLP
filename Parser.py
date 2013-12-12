@@ -72,8 +72,12 @@ class Parser:
                 matches = re.search('route\s([0-9]*)\sstops\s([0-9 ]*)\sbuses\s([0-9]*)\scapacity\s([0-9]*)', line).groups()
                 network.addRoute(int(matches[0]), map(int, str(matches[1]).split(' ')), int(matches[2]), int(matches[3]))
             elif line.startswith('road'):
-                args = line.split(' ')
-                network.addRoad(int(args[1]), int(args[2]), float(args[3]))
+                if 'experiment' in line:
+                    match = re.match('road\s(0|[1-9][0-9]*)\s(0|[1-9][0-9]*)\sexperiment((\s(0|[1-9][0-9]*)\.[0-9]+)+)$', line)
+                    network.addRoad(int(match.group(1)), int(match.group(2)), [float(number) for number in (match.group(3).split(' ')[1:])])
+                else:
+                    match = re.match('road\s(0|[1-9][0-9]*)\s(0|[1-9][0-9]*)\s((0|[1-9][0-9]*)\.[0-9]+)$', line)
+                    network.addRoad(int(match.group(1)), int(match.group(2)), float(match.group(3)))
             elif line.startswith('#') or (line == ''):
                 return
             else:
