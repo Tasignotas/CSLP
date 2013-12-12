@@ -169,6 +169,20 @@ class Simulation:
     def validateAndLoadNetwork(self, network):
         ''' This method checks if simulation's bus network is valid or not '''
         warnings.simplefilter('always' if self.ignoreWarnings else 'error')
+        # Checking if all of the rates that must be specified are there:
+        try:
+            if type(self.boardRatio) != float:
+                raise Exception('The board rate is not specified as float')
+            if type(self.disembarksRatio) != float:
+                raise Exception('The disembarks rate is not specified as float')
+            if type(self.depRatio) != float:
+                raise Exception('The departs rate is not specified as float')
+            if type(self.newPassRatio) != float:
+                raise Exception('The new passengers rate is not specified as float')
+            if type(self.stopTime) != float:
+                raise Exception('The stop time is not specified as float')
+        except:
+            raise Exception('Some of the necessary rates of the network are not specified')
         # Checking if all routes have roads defined and they are positive:
         for route in network.routes.values():
             for stop1 in route.stopSequence:
