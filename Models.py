@@ -91,9 +91,10 @@ class Network:
     def addRoad(self, stop1, stop2, throughput):
         ''' This method adds a road with specified throughput between two stops,
         stop1 and stop2'''
-        if not (stop1 in self.roads.keys()):
-            self.roads[stop1] = {}
-        self.roads[stop1][stop2] = throughput
+        if not ((stop1, stop2) in self.roads.keys()):
+            self.roads[(stop1, stop2)] = throughput
+        elif throughput != self.roads[(stop1, stop2)]:
+            raise Exception('Two different throughputs are specified for the road {0} -> {1}').format(stop1, stop2)
 
 
     def addRoute(self, routeID, stopIDs, busCount, capacity):
@@ -126,7 +127,7 @@ class Network:
             that the bus is currently on '''
         originStopID = bus.location
         destinationStopID = self.routes[bus.routeID].getNextStop(originStopID)
-        return self.roads[originStopID][destinationStopID]
+        return self.roads[(originStopID, destinationStopID)]
         
         
     def getPaxRTB(self):

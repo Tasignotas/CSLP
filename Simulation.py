@@ -174,20 +174,19 @@ class Simulation:
             for stop1 in route.stopSequence:
                 stop2 = route.getNextStop(stop1)
                 try:
-                    if network.roads[stop1][stop2] <= 0:
+                    if network.roads[(stop1, stop2)] <= 0:
                         raise Exception('The road throughput between stops {0} and {1} is <= 0'.format(stop1, stop2))
                 except KeyError:
                     raise Exception('The road between stops {0} and {1} is undefined'.format(stop1, stop2))
         # Checking if all roads are in some route:
-        for depStop in network.roads:
-            for destStop in network.roads[depStop]:
-                roadUsed = False
-                for route in network.routes.values():
-                    for stop1 in route.stopSequence:
-                        if depStop == stop1 and destStop == route.getNextStop(stop1):
-                            roadUsed = True
-                if not roadUsed:
-                    warnings.warn('Road between stops {0} and {1} is specified but not used'.format(depStop, destStop))
+        for (depStop, destStop) in network.roads:
+            roadUsed = False
+            for route in network.routes.values():
+                for stop1 in route.stopSequence:
+                    if depStop == stop1 and destStop == route.getNextStop(stop1):
+                        roadUsed = True
+            if not roadUsed:
+                warnings.warn('Road between stops {0} and {1} is specified but not used'.format(depStop, destStop))
         # If no errors were raised, we load the network for the simulation:
         self.Network = network
 
