@@ -27,40 +27,56 @@ class Parser:
         ''' Method for parsing a line of input into a method call that changes
         the network and simulation objects'''
         # Parsing arguments that affect the simulation object:
-        if line.startswith('board'):
-            if 'experiment' in line:
-                simulation.boardRatioList = [float(number) for number in (line.split(' ')[2:])]
+        try:
+            if line.startswith('board'):
+                if 'experiment' in line:
+                    match = re.match('board\sexperiment((\s(0|[1-9][0-9]*)\.[0-9]+)+)$', line)
+                    simulation.boardRatioList = [float(number) for number in (match.group(1).split(' ')[1:])]
+                else:
+                    match = re.match('board\s((0|[1-9][0-9]*)\.[0-9]+)$', line)
+                    simulation.boardRatioList = [float(match.group(1))]
+                simulation.boardRatio = simulation.boardRatioList[0]
+            elif line.startswith('disembarks'):
+                if 'experiment' in line:
+                    match = re.match('disembarks\sexperiment((\s(0|[1-9][0-9]*)\.[0-9]+)+)$', line)
+                    simulation.disembarksRatioList = [float(number) for number in (match.group(1).split(' ')[1:])]
+                else:
+                    match = re.match('disembarks\s((0|[1-9][0-9]*)\.[0-9]+)$', line)
+                    simulation.disembarksRatioList = [float(match.group(1))]
+                simulation.disembarksRatio = simulation.disembarksRatioList[0]
+            elif line.startswith('departs'):
+                if 'experiment' in line:
+                    match = re.match('departs\sexperiment((\s(0|[1-9][0-9]*)\.[0-9]+)+)$', line)
+                    simulation.depRatioList = [float(number) for number in (match.group(1).split(' ')[1:])]
+                else:
+                    match = re.match('departs\s((0|[1-9][0-9]*)\.[0-9]+)$', line)
+                    simulation.depRatioList = [float(match.group(1))]
+                simulation.depRatio = simulation.depRatioList[0]
+            elif line.startswith('new passengers'):
+                if 'experiment' in line:
+                    match = re.match('new\spassengers\sexperiment((\s(0|[1-9][0-9]*)\.[0-9]+)+)$', line)
+                    simulation.newPassRatioList = [float(number) for number in (match.group(1).split(' ')[1:])]
+                else:
+                    match = re.match('new\spassengers\s((0|[1-9][0-9]*)\.[0-9]+)$', line)
+                    simulation.newPassRatioList = [float(match.group(1))]
+                simulation.newPassRatio = simulation.newPassRatioList[0]
+            elif line.startswith('stop time'):
+                    match = re.match('stop\stime\s((0|[1-9][0-9]*)\.[0-9]+)$', line)
+                    simulation.stopTime = float(match.group(1))
+            elif line == 'ignore warnings':
+                simulation.ignoreWarnings = True
+            elif line == 'optimise parameters':
+                simulation.optimiseParameters = True
+            # Parsing arguments that affect the network object:
+            elif line.startswith('route'):
+                matches = re.search('route\s([0-9]*)\sstops\s([0-9 ]*)\sbuses\s([0-9]*)\scapacity\s([0-9]*)', line).groups()
+                network.addRoute(int(matches[0]), map(int, str(matches[1]).split(' ')), int(matches[2]), int(matches[3]))
+            elif line.startswith('road'):
+                args = line.split(' ')
+                network.addRoad(int(args[1]), int(args[2]), float(args[3]))
+            elif line.startswith('#') or (line == ''):
+                return
             else:
-                simulation.boardRatioList = [float(line.split(' ')[1])]
-            simulation.boardRatio = simulation.boardRatioList[0]
-        elif line.startswith('disembarks'):
-            if 'experiment' in line:
-                simulation.disembarksRatioList = [float(number) for number in (line.split(' ')[2:])]
-            else:
-                simulation.disembarksRatioList = [float(line.split(' ')[1])]
-            simulation.disembarksRatio = simulation.disembarksRatioList[0]
-        elif line.startswith('departs'):
-            if 'experiment' in line:
-                simulation.depRatioList = [float(number) for number in (line.split(' ')[2:])]
-            else:
-                simulation.depRatioList = [float(line.split(' ')[1])]
-            simulation.depRatio = simulation.depRatioList[0]
-        elif line.startswith('new passengers'):
-            if 'experiment' in line:
-                simulation.newPassRatioList = [float(number) for number in (line.split(' ')[3:])]
-            else:
-                simulation.newPassRatioList = [float(line.split(' ')[2])]
-            simulation.newPassRatio = simulation.newPassRatioList[0]
-        elif line.startswith('stop time'):
-                simulation.stopTime = float(line.split(' ')[2])
-        elif line.startswith('ignore warnings'):
-            simulation.ignoreWarnings = True
-        elif line.startswith('optimise parameters'):
-            simulation.optimiseParameters = True
-        # Parsing arguments that affect the network object:
-        elif line.startswith('route'):
-            matches = re.search('route\s([0-9]*)\sstops\s([0-9 ]*)\sbuses\s([0-9]*)\scapacity\s([0-9]*)', line).groups()
-            network.addRoute(int(matches[0]), map(int, str(matches[1]).split(' ')), int(matches[2]), int(matches[3]))
-        elif line.startswith('road'):
-            args = line.split(' ')
-            network.addRoad(int(args[1]), int(args[2]), float(args[3]))
+                raise Exception('"{0}" could not be recognised as a valid input line'.format(line))
+        except:
+            raise Exception('Line "{0}" could not be parsed because the values specified are incorrect'.format(line))
