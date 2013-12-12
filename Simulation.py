@@ -27,6 +27,16 @@ class Simulation:
         self.newPassRatio = []
         self.stopTime = None
 
+
+    def __eq__(self, another):
+        return ((self.ignoreWarnings == another.ignoreWarnings) and
+                (self.optimiseParameters == another.optimiseParameters) and (self.Network == another.Network) and
+                (self.boardRatioList == another.boardRatioList) and (self.boardRatio == another.boardRatio) and
+                (self.disembarksRatioList == another.disembarksRatioList) and
+                (self.disembarksRatio == another.disembarksRatio) and (self.depRatioList == another.depRatioList) and
+                (self.depRatio == another.depRatio) and (self.newPassRatioList == another.newPassRatioList) and
+                (self.newPassRatio == another.newPassRatio) and (self.stopTime == another.stopTime))
+    
         
     def execute_experimentation(self):
         ''' This method performs experimentation over all parameter values'''
