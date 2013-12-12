@@ -15,7 +15,10 @@ class Simulation:
     the constructed bus network'''
     def __init__(self):
         self.Network = None
-        self.params = {'general': {}}
+        self.params = {'general' : {},
+                       'roads' : {},
+                       'routes' : {}
+                       }
         self.params['general']['ignoreWarnings'] = False
         self.params['general']['optimiseParameters'] = False
         self.params['general']['boardRatioList'] = []
@@ -42,6 +45,14 @@ class Simulation:
                 (self.params['general']['newPassRatioList'] == another.params['general']['newPassRatioList']) and
                 (self.params['general']['newPassRatio'] == another.params['general']['newPassRatio']) and
                 (self.params['general']['stopTime'] == another.params['general']['stopTime']))
+    
+    
+    def addRoad(self, stop1, stop2, throughput):
+        ''' This method adds a road with specified throughput between stop1 and stop2'''
+        if not ((stop1, stop2) in self.params['roads']):
+            self.params['roads'][(stop1, stop2)] = throughput
+        elif throughput != self.params['roads'][(stop1, stop2)]:
+            raise Exception('Two different throughputs are specified for the road {0} -> {1}').format(stop1, stop2)
     
         
     def execute_experimentation(self):

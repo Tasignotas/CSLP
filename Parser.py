@@ -75,9 +75,11 @@ class Parser:
                 if 'experiment' in line:
                     match = re.match('road\s(0|[1-9][0-9]*)\s(0|[1-9][0-9]*)\sexperiment((\s(0|[1-9][0-9]*)\.[0-9]+)+)$', line)
                     network.addRoad(int(match.group(1)), int(match.group(2)), [float(number) for number in (match.group(3).split(' ')[1:])])
+                    simulation.addRoad(int(match.group(1)), int(match.group(2)), [float(number) for number in (match.group(3).split(' ')[1:])])
                 else:
                     match = re.match('road\s(0|[1-9][0-9]*)\s(0|[1-9][0-9]*)\s((0|[1-9][0-9]*)\.[0-9]+)$', line)
                     network.addRoad(int(match.group(1)), int(match.group(2)), float(match.group(3)))
+                    simulation.addRoad(int(match.group(1)), int(match.group(2)), float(match.group(3)))
             elif line.startswith('#') or (line == ''):
                 return
             else:
