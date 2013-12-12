@@ -14,48 +14,54 @@ class Simulation:
     ''' A class that controls the entire simulation and performs events using
     the constructed bus network'''
     def __init__(self):
-        self.ignoreWarnings = False
-        self.optimiseParameters = False
         self.Network = None
-        self.boardRatioList = []
-        self.boardRatio = None
-        self.disembarksRatioList = []
-        self.disembarksRatio = None
-        self.depRatioList = []
-        self.depRatio = None
-        self.newPassRatioList = []
-        self.newPassRatio = []
-        self.stopTime = None
+        self.params = {'general': {}}
+        self.params['general']['ignoreWarnings'] = False
+        self.params['general']['optimiseParameters'] = False
+        self.params['general']['boardRatioList'] = []
+        self.params['general']['boardRatio'] = None
+        self.params['general']['disembarksRatioList'] = []
+        self.params['general']['disembarksRatio'] = None
+        self.params['general']['depRatioList'] = []
+        self.params['general']['depRatio'] = None
+        self.params['general']['newPassRatioList'] = []
+        self.params['general']['newPassRatio'] = []
+        self.params['general']['stopTime'] = None
 
 
     def __eq__(self, another):
-        return ((self.ignoreWarnings == another.ignoreWarnings) and
-                (self.optimiseParameters == another.optimiseParameters) and (self.Network == another.Network) and
-                (self.boardRatioList == another.boardRatioList) and (self.boardRatio == another.boardRatio) and
-                (self.disembarksRatioList == another.disembarksRatioList) and
-                (self.disembarksRatio == another.disembarksRatio) and (self.depRatioList == another.depRatioList) and
-                (self.depRatio == another.depRatio) and (self.newPassRatioList == another.newPassRatioList) and
-                (self.newPassRatio == another.newPassRatio) and (self.stopTime == another.stopTime))
+        return ((self.params['general']['ignoreWarnings'] == another.params['general']['ignoreWarnings']) and
+                (self.params['general']['optimiseParameters'] == another.params['general']['optimiseParameters']) and
+                (self.Network == another.Network) and
+                (self.params['general']['boardRatioList'] == another.params['general']['boardRatioList']) and
+                (self.params['general']['boardRatio'] == another.params['general']['boardRatio']) and
+                (self.params['general']['disembarksRatioList'] == another.params['general']['disembarksRatioList']) and
+                (self.params['general']['disembarksRatio'] == another.params['general']['disembarksRatio']) and
+                (self.params['general']['depRatioList'] == another.params['general']['depRatioList']) and
+                (self.params['general']['depRatio'] == another.params['general']['depRatio']) and
+                (self.params['general']['newPassRatioList'] == another.params['general']['newPassRatioList']) and
+                (self.params['general']['newPassRatio'] == another.params['general']['newPassRatio']) and
+                (self.params['general']['stopTime'] == another.params['general']['stopTime']))
     
         
     def execute_experimentation(self):
         ''' This method performs experimentation over all parameter values'''
         initialNetwork = deepcopy(self.Network)
-        for boardRatio in self.boardRatioList:
-            self.boardRatio = boardRatio
-            if len(self.boardRatioList) != 1:
+        for boardRatio in self.params['general']['boardRatioList']:
+            self.params['general']['boardRatio'] = boardRatio
+            if len(self.params['general']['boardRatioList']) != 1:
                 print 'board {0}'.format(boardRatio)
-            for disembarksRatio in self.disembarksRatioList:
-                self.disembarksRatio = disembarksRatio
-                if len(self.disembarksRatioList) != 1:
+            for disembarksRatio in self.params['general']['disembarksRatioList']:
+                self.params['general']['disembarksRatio'] = disembarksRatio
+                if len(self.params['general']['disembarksRatioList']) != 1:
                     print 'disembarks {0}'.format(disembarksRatio)
-                for depRatio in self.depRatioList:
-                    self.depRatio = depRatio
-                    if len(self.depRatioList) != 1:
+                for depRatio in self.params['general']['depRatioList']:
+                    self.params['general']['depRatio'] = depRatio
+                    if len(self.params['general']['depRatioList']) != 1:
                         print 'departs {0}'.format(depRatio)
-                    for newPassRatio in self.newPassRatioList:
+                    for newPassRatio in self.params['general']['newPassRatioList']:
                         self.newPassRatio = newPassRatio
-                        if len(self.newPassRatioList) != 1:
+                        if len(self.params['general']['newPassRatioList']) != 1:
                             print 'new passengers {0}'.format(newPassRatio)
                         self.execute_simulation_loop()
                         self.print_statistics()
@@ -130,10 +136,12 @@ class Simulation:
 
     def execute_simulation(self):
         ''' This method chooses the right kind of simulation type to be run '''
-        if self.optimiseParameters:
+        if self.params['general']['optimiseParameters']:
             self.execute_optimisation()
-        elif (len(self.boardRatioList) * len(simulation.disembarksRatioList) * len(simulation.depRatioList) *
-              len(simulation.newPassRatioList)) > 1:
+        elif (len(self.params['general']['boardRatioList']) *
+              len(self.params['general']['disembarksRatioList']) *
+              len(self.params['general']['depRatioList']) *
+              len(self.params['general']['newPassRatioList'])) > 1:
             self.execute_experimentation()
         else:
             self.execute_simulation_loop()
@@ -143,10 +151,10 @@ class Simulation:
     def execute_simulation_loop(self, outputEvents=True):
         ''' This method implements the main simulation loop '''
         currentTime = 0
-        while currentTime <= self.stopTime:
+        while currentTime <= self.params['general']['stopTime']:
             # Getting all of the events that could occur:
             rates = self.getEventRates()
-            totalRate = (self.newPassRatio + rates['paxRTBRate'] +
+            totalRate = (self.params['general']['newPassRatio'] + rates['paxRTBRate'] +
                          rates['paxRTDRate'] + rates['busesRTARate'] +
                          rates['busesRTDRate'])
             delay = -(1.0/totalRate) * log10(uniform(0.0, 1.0))
@@ -158,14 +166,14 @@ class Simulation:
         ''' This method gets rates needed for choosing the event to execute'''
         rates = {}
         # Passengers ready to board rate:
-        rates['paxRTBRate'] = len(self.Network.getPaxRTB()) * self.boardRatio
+        rates['paxRTBRate'] = len(self.Network.getPaxRTB()) * self.params['general']['boardRatio']
         # Passengers ready to disembark rate:
-        rates['paxRTDRate'] = len(self.Network.getPaxRTD()) * self.disembarksRatio
+        rates['paxRTDRate'] = len(self.Network.getPaxRTD()) * self.params['general']['disembarksRatio']
         # Buses ready to depart rate:
-        rates['busesRTDRate'] = len(self.Network.getBusesRTD()) * self.depRatio
+        rates['busesRTDRate'] = len(self.Network.getBusesRTD()) * self.params['general']['depRatio']
         # Buses ready to arrive rate:
         rates['busesRTARate'] = sum([self.Network.getThroughput(bus) for (bus, route) in self.Network.getBusesRTA()])
-        print rates
+        #print rates
         return rates
 
 
@@ -188,18 +196,18 @@ class Simulation:
     
     def validateAndLoadNetwork(self, network):
         ''' This method checks if simulation's bus network is valid or not '''
-        warnings.simplefilter('always' if self.ignoreWarnings else 'error')
+        warnings.simplefilter('always' if self.params['general']['ignoreWarnings'] else 'error')
         # Checking if all of the rates that must be specified are there:
         try:
-            if type(self.boardRatio) != float:
+            if type(self.params['general']['boardRatio']) != float:
                 raise Exception('The board rate is not specified as float')
-            if type(self.disembarksRatio) != float:
+            if type(self.params['general']['disembarksRatio']) != float:
                 raise Exception('The disembarks rate is not specified as float')
-            if type(self.depRatio) != float:
+            if type(self.params['general']['depRatio']) != float:
                 raise Exception('The departs rate is not specified as float')
-            if type(self.newPassRatio) != float:
+            if type(self.params['general']['newPassRatio']) != float:
                 raise Exception('The new passengers rate is not specified as float')
-            if type(self.stopTime) != float:
+            if type(self.params['general']['stopTime']) != float:
                 raise Exception('The stop time is not specified as float')
         except:
             raise Exception('Some of the necessary rates of the network are not specified')

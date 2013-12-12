@@ -17,55 +17,56 @@ class ParserTests(unittest.TestCase):
     def testBoard(self):
         ''' Tests if the board parameters are parsed correctly by the parser'''
         Parser.Parser._parseLine('board experiment 0.5 0.6 0.7', self.network, self.simulation)
-        self.assertEqual(self.simulation.boardRatioList, [0.5, 0.6, 0.7])
+        self.assertEqual(self.simulation.params['general']['boardRatioList'], [0.5, 0.6, 0.7])
         Parser.Parser._parseLine('board 0.5', self.network, self.simulation)
-        self.assertEqual(self.simulation.boardRatioList, [0.5])
+        self.assertEqual(self.simulation.params['general']['boardRatioList'], [0.5])
         self.assertRaises(Exception, Parser.Parser._parseLine, 'board ', self.network, self.simulation)
         self.assertRaises(Exception, Parser.Parser._parseLine, 'board 0.5 0.6 0.7', self.network, self.simulation)
         
+
     def testDisembarks(self):
         ''' Tests if the disembarks parameters are parsed correctly by the parser'''
         Parser.Parser._parseLine('disembarks experiment 0.5 0.6 0.7', self.network, self.simulation)
-        self.assertEqual(self.simulation.disembarksRatioList, [0.5, 0.6, 0.7])
+        self.assertEqual(self.simulation.params['general']['disembarksRatioList'], [0.5, 0.6, 0.7])
         Parser.Parser._parseLine('disembarks 0.5', self.network, self.simulation)
-        self.assertEqual(self.simulation.disembarksRatioList, [0.5])
+        self.assertEqual(self.simulation.params['general']['disembarksRatioList'], [0.5])
         self.assertRaises(Exception, Parser.Parser._parseLine, 'disembarks 0.5 0.6 0.7', self.network, self.simulation)
         
         
     def testDeparts(self):
         ''' Tests if the departs parameters are parsed correctly by the parser'''
         Parser.Parser._parseLine('departs experiment 0.5 0.6 0.7', self.network, self.simulation)
-        self.assertEqual(self.simulation.depRatioList, [0.5, 0.6, 0.7])
+        self.assertEqual(self.simulation.params['general']['depRatioList'], [0.5, 0.6, 0.7])
         Parser.Parser._parseLine('departs 0.5', self.network, self.simulation)
-        self.assertEqual(self.simulation.depRatioList, [0.5])
+        self.assertEqual(self.simulation.params['general']['depRatioList'], [0.5])
         self.assertRaises(Exception, Parser.Parser._parseLine, 'departs 0.5 0.6 0.7', self.network, self.simulation)
         
         
     def testNewPassengers(self):
         ''' Tests if the new passengers parameters are parsed correctly by the parser'''
         Parser.Parser._parseLine('new passengers experiment 0.5 0.6 0.7', self.network, self.simulation)
-        self.assertEqual(self.simulation.newPassRatioList, [0.5, 0.6, 0.7])
+        self.assertEqual(self.simulation.params['general']['newPassRatioList'], [0.5, 0.6, 0.7])
         Parser.Parser._parseLine('new passengers 0.5', self.network, self.simulation)
-        self.assertEqual(self.simulation.newPassRatioList, [0.5])
+        self.assertEqual(self.simulation.params['general']['newPassRatioList'], [0.5])
         self.assertRaises(Exception, Parser.Parser._parseLine, 'new passengers 0.5 0.6 0.7', self.network, self.simulation)
         
     
     def testStopTime(self):
         ''' Tests if the stop time parameters are parsed correctly by the parser'''
         Parser.Parser._parseLine('stop time 111.1', self.network, self.simulation)
-        self.assertEqual(self.simulation.stopTime, 111.1)
+        self.assertEqual(self.simulation.params['general']['stopTime'], 111.1)
         
     
     def testIgnoreWarnings(self):
         ''' Tests if the ignore warnings flag was set as expected'''
         Parser.Parser._parseLine('ignore warnings', self.network, self.simulation)
-        self.assertEqual(self.simulation.ignoreWarnings, True)
+        self.assertEqual(self.simulation.params['general']['ignoreWarnings'], True)
 
 
     def testOptimiseParameters(self):
         ''' Tests if the ignore warnings flag was set as expected'''
         Parser.Parser._parseLine('optimise parameters', self.network, self.simulation)
-        self.assertEqual(self.simulation.optimiseParameters, True)
+        self.assertEqual(self.simulation.params['general']['optimiseParameters'], True)
 
 
     def testInvalidLine(self):
