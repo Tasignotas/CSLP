@@ -119,10 +119,9 @@ class Network:
         return ((self.routes == another.routes) and (self.stops == another.stops) and (self.roads == another.roads))
     
     def changeParams(self, paramDict):
+        ''' Method that changes the given network parameters'''
         for key in paramDict:
             self.params[key.replace('List', '')] = paramDict[key]
-        print paramDict
-        print self.params
 
 
     def addRoute(self, routeID, stopIDs, busCount, capacity):
