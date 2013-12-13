@@ -64,12 +64,13 @@ class Simulation:
             if len(self.params['roads'][(stop1, stop2)]) > 1:
                 print 'road {0} {1} {2}'.format(stop1, stop2, roadSet[(stop1, stop2)])
         
+
     def execute_experimentation(self, generalParamSets, roadSets):
         ''' This method performs experimentation over all parameter values'''
         initialNetwork = deepcopy(self.Network)
         for generalParamSet in generalParamSets:
             for roadSet in roadSets:
-                self.Network.changeParams(generalParamSet)
+                self.Network.changeGeneralParams(generalParamSet)
                 self.Network.roads = roadSet
                 self.print_experimentation_parameters(generalParamSet, roadSet)
                 self.execute_simulation_loop()
@@ -84,7 +85,7 @@ class Simulation:
         for generalParamSet in generalParamSets:
             for roadSet in roadSets:
                 if minCost != 0:
-                    self.Network.changeParams(generalParamSet)
+                    self.Network.changeGeneralParams(generalParamSet)
                     self.Network.roads = roadSet
                     self.execute_simulation_loop(outputEvents=False)
                     # Getting the number of missed passengers:
@@ -137,7 +138,7 @@ class Simulation:
         elif self.params['control']['experimentation']:
             self.execute_experimentation(generalParamSets, roadSets)
         else:
-            self.Network.changeParams(generalParamSets[0])
+            self.Network.changeGeneralParams(generalParamSets[0])
             self.Network.roads = roadSets[0]
             self.execute_simulation_loop()
             self.print_statistics()
