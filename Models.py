@@ -123,6 +123,11 @@ class Network:
         for key in paramDict:
             self.params[key.replace('List', '')] = paramDict[key]
    
+            
+    def changeRoadParams(self, paramDict):
+        ''' Method that changes the road params with those specified in the dictionary'''
+        self.roads = paramDict
+  
 
     def addRoute(self, routeID, stopIDs, busCount, capacity):
         ''' This method adds a route with its buses and stops to the network'''
