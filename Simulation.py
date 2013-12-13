@@ -71,7 +71,7 @@ class Simulation:
         for generalParamSet in generalParamSets:
             for roadSet in roadSets:
                 self.Network.changeGeneralParams(generalParamSet)
-                self.Network.roads = roadSet
+                self.Network.changeRoadParams(roadSet)
                 self.print_experimentation_parameters(generalParamSet, roadSet)
                 self.execute_simulation_loop()
                 self.print_statistics()
@@ -86,7 +86,7 @@ class Simulation:
             for roadSet in roadSets:
                 if minCost != 0:
                     self.Network.changeGeneralParams(generalParamSet)
-                    self.Network.roads = roadSet
+                    self.Network.changeRoadParams(roadSet)
                     self.execute_simulation_loop(outputEvents=False)
                     # Getting the number of missed passengers:
                     totalPassengers = sum([stop.missedPassengers for stop in self.Network.stops.values()])
@@ -139,7 +139,7 @@ class Simulation:
             self.execute_experimentation(generalParamSets, roadSets)
         else:
             self.Network.changeGeneralParams(generalParamSets[0])
-            self.Network.roads = roadSets[0]
+            self.Network.changeRoadParams(roadSets[0])
             self.execute_simulation_loop()
             self.print_statistics()
             
