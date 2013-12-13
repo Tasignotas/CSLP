@@ -61,6 +61,14 @@ class Simulation:
         product = [x for x in apply(itertools.product, self.params['roads'].values())]
         return [dict(zip(self.params['roads'].keys(), p)) for p in product]
     
+    
+    def generateGeneralParamSets(self):
+        ''' This method generates all possible general simulation parameter combinations'''
+        print self.params['general']
+        values = [value if hasattr(value, '__iter__') else [value] for value in self.params['general'].values()]
+        product = [x for x in apply(itertools.product, values)]
+        return [dict(zip(self.params['general'].keys(), p)) for p in product]
+    
         
     def execute_experimentation(self):
         ''' This method performs experimentation over all parameter values'''
