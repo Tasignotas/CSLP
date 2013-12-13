@@ -54,19 +54,19 @@ class ParserTests(unittest.TestCase):
     def testStopTime(self):
         ''' Tests if the stop time parameters are parsed correctly by the parser'''
         Parser.Parser._parseLine('stop time 111.1', self.network, self.simulation)
-        self.assertEqual(self.simulation.params['general']['stopTime'], 111.1)
+        self.assertEqual(self.simulation.params['control']['stopTime'], 111.1)
         
     
     def testIgnoreWarnings(self):
         ''' Tests if the ignore warnings flag was set as expected'''
         Parser.Parser._parseLine('ignore warnings', self.network, self.simulation)
-        self.assertEqual(self.simulation.params['general']['ignoreWarnings'], True)
+        self.assertEqual(self.simulation.params['control']['ignoreWarnings'], True)
 
 
     def testOptimiseParameters(self):
         ''' Tests if the ignore warnings flag was set as expected'''
         Parser.Parser._parseLine('optimise parameters', self.network, self.simulation)
-        self.assertEqual(self.simulation.params['general']['optimiseParameters'], True)
+        self.assertEqual(self.simulation.params['control']['optimiseParameters'], True)
 
 
     def testInvalidLine(self):

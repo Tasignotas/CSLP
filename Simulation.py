@@ -16,12 +16,13 @@ class Simulation:
     the constructed bus network'''
     def __init__(self):
         self.Network = None
-        self.params = {'general' : {},
+        self.params = {'control' : {},
+                       'general' : {},
                        'roads' : {},
                        'routes' : {}
                        }
-        self.params['general']['ignoreWarnings'] = False
-        self.params['general']['optimiseParameters'] = False
+        self.params['control']['ignoreWarnings'] = False
+        self.params['control']['optimiseParameters'] = False
         self.params['general']['boardRatioList'] = []
         self.params['general']['disembarksRatioList'] = []
         self.params['general']['depRatioList'] = []
@@ -150,7 +151,7 @@ class Simulation:
         ''' This method chooses the right kind of simulation type to be run '''
         generalParamSets = self.generateGeneralParamSets()
         roadSets = self.generateRoadSets()
-        if self.params['general']['optimiseParameters']:
+        if self.params['control']['optimiseParameters']:
             self.execute_optimisation(generalParamSets, roadSets)
         elif (len(generalParamSets) * len(roadSets)) > 1:
             self.execute_experimentation(generalParamSets, roadSets)
@@ -164,7 +165,7 @@ class Simulation:
     def execute_simulation_loop(self, outputEvents=True):
         ''' This method implements the main simulation loop '''
         currentTime = 0
-        while currentTime <= self.params['general']['stopTime']:
+        while currentTime <= self.params['control']['stopTime']:
             # Getting all of the events that could occur:
             rates = self.getEventRates()
             totalRate = (self.Network.params['newPassRatio'] + rates['paxRTBRate'] +
@@ -209,7 +210,7 @@ class Simulation:
     
     def validateAndLoadNetwork(self, network):
         ''' This method checks if simulation's bus network is valid or not '''
-        warnings.simplefilter('always' if self.params['general']['ignoreWarnings'] else 'error')
+        warnings.simplefilter('always' if self.params['control']['ignoreWarnings'] else 'error')
         # Checking if all of the rates that must be specified are there:
         try:
             if len(self.params['general']['boardRatioList']) == 0:
@@ -220,7 +221,7 @@ class Simulation:
                 raise Exception('No departs rate has been specified')
             if len(self.params['general']['newPassRatioList']) == 0:
                 raise Exception('No new passenger rate has been specified')
-            if not(self.params['general']['stopTime']):
+            if not(self.params['control']['stopTime']):
                 raise Exception('No stop time has been specified')
         except:
             raise Exception('Some of the necessary rates of the network are not specified')

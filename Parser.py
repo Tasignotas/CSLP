@@ -58,11 +58,11 @@ class Parser:
                     simulation.params['general']['newPassRatioList'] = [float(match.group(1))]
             elif line.startswith('stop time'):
                     match = re.match('stop\stime\s((0|[1-9][0-9]*)\.[0-9]+)$', line)
-                    simulation.params['general']['stopTime'] = float(match.group(1))
+                    simulation.params['control']['stopTime'] = float(match.group(1))
             elif line == 'ignore warnings':
-                simulation.params['general']['ignoreWarnings'] = True
+                simulation.params['control']['ignoreWarnings'] = True
             elif line == 'optimise parameters':
-                simulation.params['general']['optimiseParameters'] = True
+                simulation.params['control']['optimiseParameters'] = True
             # Parsing arguments that affect the network object:
             elif line.startswith('route'):
                 matches = re.search('route\s([0-9]*)\sstops\s([0-9 ]*)\sbuses\s([0-9]*)\scapacity\s([0-9]*)', line).groups()
