@@ -218,29 +218,28 @@ class Simulation:
         warnings.simplefilter('always' if self.params['general']['ignoreWarnings'] else 'error')
         # Checking if all of the rates that must be specified are there:
         try:
-            if type(self.params['general']['boardRatio']) != float:
-                raise Exception('The board rate is not specified as float')
-            if type(self.params['general']['disembarksRatio']) != float:
-                raise Exception('The disembarks rate is not specified as float')
-            if type(self.params['general']['depRatio']) != float:
-                raise Exception('The departs rate is not specified as float')
-            if type(self.params['general']['newPassRatio']) != float:
-                raise Exception('The new passengers rate is not specified as float')
-            if type(self.params['general']['stopTime']) != float:
-                raise Exception('The stop time is not specified as float')
+            if len(self.params['general']['boardRatioList']) == 0:
+                raise Exception('No board rate has been specified')
+            if len(self.params['general']['disembarksRatioList']) == 0:
+                raise Exception('No disembarks rate has been specified')
+            if len(self.params['general']['depRatioList']) == 0:
+                raise Exception('No departs rate has been specified')
+            if len(self.params['general']['newPassRatioList']) == 0:
+                raise Exception('No new passenger rate has been specified')
+            if not(self.params['general']['stopTime']):
+                raise Exception('No stop time has been specified')
         except:
             raise Exception('Some of the necessary rates of the network are not specified')
-        # Checking if all routes have roads defined and they are positive:
+        # Checking if all routes have roads defined:
         for route in network.routes.values():
             for stop1 in route.stopSequence:
                 stop2 = route.getNextStop(stop1)
                 try:
-                    if network.roads[(stop1, stop2)] <= 0:
-                        raise Exception('The road throughput between stops {0} and {1} is <= 0'.format(stop1, stop2))
+                    self.params['roads'][(stop1, stop2)]
                 except KeyError:
                     raise Exception('The road between stops {0} and {1} is undefined'.format(stop1, stop2))
         # Checking if all roads are in some route:
-        for (depStop, destStop) in network.roads:
+        for (depStop, destStop) in self.params['roads']:
             roadUsed = False
             for route in network.routes.values():
                 for stop1 in route.stopSequence:
