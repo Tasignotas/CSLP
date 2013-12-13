@@ -162,6 +162,7 @@ class Simulation:
             self.execute_experimentation(generalParamSets, roadSets)
         else:
             self.Network.changeParams(generalParamSets[0])
+            self.Network.roads = roadSets[0]
             self.execute_simulation_loop()
             self.print_statistics()
             

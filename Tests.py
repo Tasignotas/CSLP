@@ -88,9 +88,9 @@ class ParserTests(unittest.TestCase):
         ''' Tests if the road parameters are parsed correctly by the parser:
             1. Checks if the addRoad method is called with correct parameters
             2. Checks if an exception is raised with incorrectly structured input'''
-        with patch.object(self.network, 'addRoad') as mock:
+        with patch.object(self.simulation, 'addRoad') as mock:
             Parser.Parser._parseLine('road 1 2 0.3', self.network, self.simulation)
-        mock.assert_called_with(1, 2, 0.3)
+        mock.assert_called_with(1, 2, [0.3])
         
         
     def testRoute(self):

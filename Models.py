@@ -118,14 +118,6 @@ class Network:
     def __eq__(self, another):
         return ((self.routes == another.routes) and (self.stops == another.stops) and (self.roads == another.roads))
     
-    
-    def addRoad(self, stop1, stop2, throughput):
-        ''' This method adds a road with specified throughput between two stops,
-        stop1 and stop2'''
-        if not ((stop1, stop2) in self.roads.keys()):
-            self.roads[(stop1, stop2)] = throughput
-        elif throughput != self.roads[(stop1, stop2)]:
-            raise Exception('Two different throughputs are specified for the road {0} -> {1}').format(stop1, stop2)
     def changeParams(self, paramDict):
         for key in paramDict:
             self.params[key.replace('List', '')] = paramDict[key]
