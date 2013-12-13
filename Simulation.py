@@ -55,7 +55,6 @@ class Simulation:
         return [dict(zip(self.params['general'].keys(), p)) for p in product]
     
         
-    def execute_experimentation(self):
     def print_experimentation_parameters(self, generalParamSet, roadSet): 
         ''' Method that prints all experimentation values of the given parameter dicts''' 
         for key in generalParamSet:
@@ -65,27 +64,17 @@ class Simulation:
             if len(self.params['roads'][(stop1, stop2)]) > 1:
                 print 'road {0} {1} {2}'.format(stop1, stop2, roadSet[(stop1, stop2)])
         
+    def execute_experimentation(self, generalParamSets, roadSets):
         ''' This method performs experimentation over all parameter values'''
         initialNetwork = deepcopy(self.Network)
-        for boardRatio in self.params['general']['boardRatioList']:
-            self.params['general']['boardRatio'] = boardRatio
-            if len(self.params['general']['boardRatioList']) != 1:
-                print 'board {0}'.format(boardRatio)
-            for disembarksRatio in self.params['general']['disembarksRatioList']:
-                self.params['general']['disembarksRatio'] = disembarksRatio
-                if len(self.params['general']['disembarksRatioList']) != 1:
-                    print 'disembarks {0}'.format(disembarksRatio)
-                for depRatio in self.params['general']['depRatioList']:
-                    self.params['general']['depRatio'] = depRatio
-                    if len(self.params['general']['depRatioList']) != 1:
-                        print 'departs {0}'.format(depRatio)
-                    for newPassRatio in self.params['general']['newPassRatioList']:
-                        self.newPassRatio = newPassRatio
-                        if len(self.params['general']['newPassRatioList']) != 1:
-                            print 'new passengers {0}'.format(newPassRatio)
-                        self.execute_simulation_loop()
-                        self.print_statistics()
-                        self.Network = deepcopy(initialNetwork)
+        for generalParamSet in generalParamSets:
+            for roadSet in roadSets:
+                self.Network.changeParams(generalParamSet)
+                self.Network.roads = roadSet
+                self.print_experimentation_parameters(generalParamSet, roadSet)
+                self.execute_simulation_loop()
+                self.print_statistics()
+                self.Network = deepcopy(initialNetwork)
                             
                             
     def execute_optimisation(self):
