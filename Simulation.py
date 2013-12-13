@@ -102,7 +102,7 @@ class Simulation:
     def print_statistics(self):
         ''' Method that prints the statistics of the most recent run of the simulation'''
         # Missed passengers:
-        total = 0.0
+        total = 0
         for stop in self.Network.stops.values():
             print 'number of missed passengers stop {0} {1}'.format(stop.stopID, stop.missedPassengers)
             total += stop.missedPassengers
