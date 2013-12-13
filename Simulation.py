@@ -23,14 +23,9 @@ class Simulation:
         self.params['general']['ignoreWarnings'] = False
         self.params['general']['optimiseParameters'] = False
         self.params['general']['boardRatioList'] = []
-        self.params['general']['boardRatio'] = None
         self.params['general']['disembarksRatioList'] = []
-        self.params['general']['disembarksRatio'] = None
         self.params['general']['depRatioList'] = []
-        self.params['general']['depRatio'] = None
         self.params['general']['newPassRatioList'] = []
-        self.params['general']['newPassRatio'] = []
-        self.params['general']['stopTime'] = None
 
 
     def __eq__(self, another):
@@ -38,14 +33,9 @@ class Simulation:
                 (self.params['general']['optimiseParameters'] == another.params['general']['optimiseParameters']) and
                 (self.Network == another.Network) and
                 (self.params['general']['boardRatioList'] == another.params['general']['boardRatioList']) and
-                (self.params['general']['boardRatio'] == another.params['general']['boardRatio']) and
                 (self.params['general']['disembarksRatioList'] == another.params['general']['disembarksRatioList']) and
-                (self.params['general']['disembarksRatio'] == another.params['general']['disembarksRatio']) and
                 (self.params['general']['depRatioList'] == another.params['general']['depRatioList']) and
-                (self.params['general']['depRatio'] == another.params['general']['depRatio']) and
-                (self.params['general']['newPassRatioList'] == another.params['general']['newPassRatioList']) and
-                (self.params['general']['newPassRatio'] == another.params['general']['newPassRatio']) and
-                (self.params['general']['stopTime'] == another.params['general']['stopTime']))
+                (self.params['general']['newPassRatioList'] == another.params['general']['newPassRatioList']))
     
     
     def addRoad(self, stop1, stop2, throughput):
@@ -64,7 +54,6 @@ class Simulation:
     
     def generateGeneralParamSets(self):
         ''' This method generates all possible general simulation parameter combinations'''
-        print self.params['general']
         values = [value if hasattr(value, '__iter__') else [value] for value in self.params['general'].values()]
         product = [x for x in apply(itertools.product, values)]
         return [dict(zip(self.params['general'].keys(), p)) for p in product]
@@ -165,14 +154,14 @@ class Simulation:
 
     def execute_simulation(self):
         ''' This method chooses the right kind of simulation type to be run '''
+        generalParamSets = self.generateGeneralParamSets()
+        roadSets = self.generateRoadSets()
         if self.params['general']['optimiseParameters']:
-            self.execute_optimisation()
-        elif (len(self.params['general']['boardRatioList']) *
-              len(self.params['general']['disembarksRatioList']) *
-              len(self.params['general']['depRatioList']) *
-              len(self.params['general']['newPassRatioList'])) > 1:
-            self.execute_experimentation()
+            self.execute_optimisation(generalParamSets, roadSets)
+        elif (len(generalParamSets) * len(roadSets)) > 1:
+            self.execute_experimentation(generalParamSets, roadSets)
         else:
+            self.Network.changeParams(generalParamSets[0])
             self.execute_simulation_loop()
             self.print_statistics()
             
@@ -183,7 +172,7 @@ class Simulation:
         while currentTime <= self.params['general']['stopTime']:
             # Getting all of the events that could occur:
             rates = self.getEventRates()
-            totalRate = (self.params['general']['newPassRatio'] + rates['paxRTBRate'] +
+            totalRate = (self.Network.params['newPassRatio'] + rates['paxRTBRate'] +
                          rates['paxRTDRate'] + rates['busesRTARate'] +
                          rates['busesRTDRate'])
             delay = -(1.0/totalRate) * log10(uniform(0.0, 1.0))
@@ -195,11 +184,11 @@ class Simulation:
         ''' This method gets rates needed for choosing the event to execute'''
         rates = {}
         # Passengers ready to board rate:
-        rates['paxRTBRate'] = len(self.Network.getPaxRTB()) * self.params['general']['boardRatio']
+        rates['paxRTBRate'] = len(self.Network.getPaxRTB()) * self.Network.params['boardRatio']
         # Passengers ready to disembark rate:
-        rates['paxRTDRate'] = len(self.Network.getPaxRTD()) * self.params['general']['disembarksRatio']
+        rates['paxRTDRate'] = len(self.Network.getPaxRTD()) * self.Network.params['disembarksRatio']
         # Buses ready to depart rate:
-        rates['busesRTDRate'] = len(self.Network.getBusesRTD()) * self.params['general']['depRatio']
+        rates['busesRTDRate'] = len(self.Network.getBusesRTD()) * self.Network.params['depRatio']
         # Buses ready to arrive rate:
         rates['busesRTARate'] = sum([self.Network.getThroughput(bus) for (bus, route) in self.Network.getBusesRTA()])
         #print rates

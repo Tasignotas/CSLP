@@ -111,6 +111,7 @@ class Network:
         self.routes = {}
         self.stops = {}
         self.roads = {}
+        self.params = {}
         random.seed(0)
         
     
@@ -125,6 +126,11 @@ class Network:
             self.roads[(stop1, stop2)] = throughput
         elif throughput != self.roads[(stop1, stop2)]:
             raise Exception('Two different throughputs are specified for the road {0} -> {1}').format(stop1, stop2)
+    def changeParams(self, paramDict):
+        for key in paramDict:
+            self.params[key.replace('List', '')] = paramDict[key]
+        print paramDict
+        print self.params
 
 
     def addRoute(self, routeID, stopIDs, busCount, capacity):
