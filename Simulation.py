@@ -29,13 +29,7 @@ class Simulation:
 
 
     def __eq__(self, another):
-        return ((self.params['general']['ignoreWarnings'] == another.params['general']['ignoreWarnings']) and
-                (self.params['general']['optimiseParameters'] == another.params['general']['optimiseParameters']) and
-                (self.Network == another.Network) and
-                (self.params['general']['boardRatioList'] == another.params['general']['boardRatioList']) and
-                (self.params['general']['disembarksRatioList'] == another.params['general']['disembarksRatioList']) and
-                (self.params['general']['depRatioList'] == another.params['general']['depRatioList']) and
-                (self.params['general']['newPassRatioList'] == another.params['general']['newPassRatioList']))
+        return (self.Network == another.Network) and (self.params == another.params)
     
     
     def addRoad(self, stop1, stop2, throughput):
