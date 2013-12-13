@@ -152,7 +152,7 @@ class Simulation:
         roadSets = self.generateRoadSets()
         if self.params['control']['optimiseParameters']:
             self.execute_optimisation(generalParamSets, roadSets)
-        elif (len(generalParamSets) * len(roadSets)) > 1:
+        elif self.params['control']['experimentation']:
             self.execute_experimentation(generalParamSets, roadSets)
         else:
             self.Network.changeParams(generalParamSets[0])
