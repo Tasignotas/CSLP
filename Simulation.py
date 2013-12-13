@@ -8,7 +8,7 @@ import warnings
 from random import uniform
 from math import log10
 from copy import deepcopy
-import itertools
+import itertools, operator
 
 
 class Simulation:
@@ -56,6 +56,15 @@ class Simulation:
     
         
     def execute_experimentation(self):
+    def print_experimentation_parameters(self, generalParamSet, roadSet): 
+        ''' Method that prints all experimentation values of the given parameter dicts''' 
+        for key in generalParamSet:
+            if len(self.params['general'][key]) > 1:
+                print key + ' ' + str(generalParamSet[key])
+        for (stop1, stop2) in roadSet:
+            if len(self.params['roads'][(stop1, stop2)]) > 1:
+                print 'road {0} {1} {2}'.format(stop1, stop2, roadSet[(stop1, stop2)])
+        
         ''' This method performs experimentation over all parameter values'''
         initialNetwork = deepcopy(self.Network)
         for boardRatio in self.params['general']['boardRatioList']:
