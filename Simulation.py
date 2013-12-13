@@ -76,45 +76,29 @@ class Simulation:
                 self.print_statistics()
                 self.Network = deepcopy(initialNetwork)
                             
-                            
-    def execute_optimisation(self):
+                                          
+    def execute_optimisation(self, generalParamSets, roadSets):
         ''' This method performs parameter optimisation'''
         minCost = None
         initialNetwork = deepcopy(self.Network)
-        for boardRatio in self.params['general']['boardRatioList']:
-            self.params['general']['boardRatio'] = boardRatio
-            for disembarksRatio in self.params['general']['disembarksRatioList']:
-                self.params['general']['disembarksRatio'] = disembarksRatio
-                for depRatio in self.params['general']['depRatioList']:
-                    self.params['general']['depRatio'] = depRatio
-                    for newPassRatio in self.params['general']['newPassRatioList']:
-                        self.params['general']['newPassRatio'] = newPassRatio
-                        if minCost != 0:
-                            self.execute_simulation_loop(outputEvents=False)
-                            # Getting the number of missed passengers:
-                            totalPassengers = 0
-                            for stop in self.Network.stops.values():
-                                totalPassengers += stop.missedPassengers
-                            cost = totalPassengers * (self.params['general']['boardRatio'] +
-                                                      self.params['general']['disembarksRatio'] +
-                                                      self.params['general']['depRatio'] +
-                                                      self.params['general']['newPassRatio'])
-                            if not (minCost) or (minCost > cost):
-                                minCost = cost
-                                params = {'boardRatio' : self.params['general']['boardRatio'],
-                                          'disembarksRatio' : self.params['general']['disembarksRatio'],
-                                          'depRatio' : self.params['general']['depRatio'],
-                                          'newPassRatio' : self.params['general']['newPassRatio']}
-                            self.Network = deepcopy(initialNetwork)
+        for generalParamSet in generalParamSets:
+            for roadSet in roadSets:
+                if minCost != 0:
+                    self.Network.changeParams(generalParamSet)
+                    self.Network.roads = roadSet
+                    self.execute_simulation_loop(outputEvents=False)
+                    # Getting the number of missed passengers:
+                    totalPassengers = 0
+                    for stop in self.Network.stops.values():
+                        totalPassengers += stop.missedPassengers
+                    cost = totalPassengers * reduce(operator.mul, generalParamSet.values()) * reduce(operator.mul, roadSet.values())
+                    if not (minCost) or (minCost > cost):
+                        minCost = cost
+                        maxGeneralParamSet = generalParamSet
+                        maxRoadSet = roadSet
+                    self.Network = deepcopy(initialNetwork)
         print 'Bus network is optimized with setting the parameters as:'
-        if len(self.params['general']['boardRatioList']) > 1:
-            print 'board: {0}'.format(params['boardRatio'])
-        if len(self.params['general']['disembarksRatioList']) > 1:
-            print 'disembarks: {0}'.format(params['disembarksRatio'])
-        if len(self.params['general']['depRatioList']) > 1:
-            print 'departs: {0}'.format(params['depRatio'])
-        if len(self.params['general']['newPassRatioList']) > 1:
-            print 'new passengers: {0}'.format(params['newPassRatio'])
+        self.print_experimentation_parameters(maxGeneralParamSet, maxRoadSet)
     
     
     def print_statistics(self):
