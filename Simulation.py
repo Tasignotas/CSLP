@@ -23,6 +23,7 @@ class Simulation:
                        }
         self.params['control']['ignoreWarnings'] = False
         self.params['control']['optimiseParameters'] = False
+        self.params['control']['experimentation'] = False
         self.params['general']['boardRatioList'] = []
         self.params['general']['disembarksRatioList'] = []
         self.params['general']['depRatioList'] = []
