@@ -48,7 +48,7 @@ class Simulation:
         capacity.sort()
         self.Network.addRoute(routeID, stopIDs, busCount[0], capacity[0])
         self.params['routes'][routeID] = {'routeID' : [routeID],
-                                          'busCount' : busCount,
+                                          'buses' : busCount,
                                           'capacity' : capacity
                                           }
 

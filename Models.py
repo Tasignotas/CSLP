@@ -132,7 +132,7 @@ class Network:
     def changeRouteParams(self, routeDict):
         ''' Method that changes the route parameters with those specified in the dictionary'''
         for route in routeDict:
-            for x in range(len(self.routes[route['routeID']].buses), route['busCount']):
+            for x in range(len(self.routes[route['routeID']].buses), route['buses']):
                 self.routes[route['routeID']].getNewBus()
             for bus in self.routes[route['routeID']].buses:
                 bus.capacity = route['capacity']
