@@ -190,8 +190,8 @@ class Simulation:
             self.Network.addPassenger(time, outputEvents)
             
     
-    def validateAndLoadNetwork(self, network):
-        ''' This method checks if simulation's bus network is valid or not '''
+    def validateSimulation(self):
+        ''' This method checks if simulation's bus network and other parameters are valid or not '''
         warnings.simplefilter('always' if self.params['control']['ignoreWarnings'] else 'error')
         # Checking if all of the rates that must be specified are there:
         try:
@@ -208,7 +208,7 @@ class Simulation:
         except:
             raise Exception('Some of the necessary rates of the network are not specified')
         # Checking if all routes have roads defined:
-        for route in network.routes.values():
+        for route in self.Network.routes.values():
             for stop1 in route.stopSequence:
                 stop2 = route.getNextStop(stop1)
                 try:
@@ -218,7 +218,7 @@ class Simulation:
         # Checking if all roads are in some route:
         for (depStop, destStop) in self.params['roads']:
             roadUsed = False
-            for route in network.routes.values():
+            for route in self.Network.routes.values():
                 for stop1 in route.stopSequence:
                     if depStop == stop1 and destStop == route.getNextStop(stop1):
                         roadUsed = True
@@ -227,13 +227,12 @@ class Simulation:
         # Checking if the simulation has experimentation parameters if we need to optimise it:
         if self.params['control']['optimiseParameters'] and not (self.params['control']['experimentation']):
             raise Exception('There are no experimentation values given although optimisation flag is set to True')
-        # If no errors were raised, we load the network for the simulation:
-        self.Network = network
+
 
 
 if __name__ == '__main__':
     simulation = Simulation()
     fileName = raw_input('Please enter the name of the input file: ')
-    network = Parser.Parser.parseFile(fileName, simulation)
-    simulation.validateAndLoadNetwork(network)
+    Parser.Parser.parseFile(fileName, simulation)
+    simulation.validateSimulation()
     simulation.execute_simulation()
