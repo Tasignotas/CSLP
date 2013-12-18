@@ -27,6 +27,8 @@ class Parser:
         # Parsing arguments that affect the simulation object:
         try:
             if line.startswith('board'):
+                if simulation.params['general']['board'] != []:
+                    raise Exception("The board rate can be specified only once per input file!")
                 if 'experiment' in line:
                     match = re.match('board\sexperiment((\s(0|[1-9][0-9]*)\.[0-9]+)+)$', line)
                     simulation.params['general']['board'] = [float(number) for number in (match.group(1).split(' ')[1:])]
@@ -35,6 +37,8 @@ class Parser:
                     match = re.match('board\s((0|[1-9][0-9]*)\.[0-9]+)$', line)
                     simulation.params['general']['board'] = [float(match.group(1))]
             elif line.startswith('disembarks'):
+                if simulation.params['general']['disembarks'] != []:
+                    raise Exception("The disembarks rate can be specified only once per input file!")
                 if 'experiment' in line:
                     match = re.match('disembarks\sexperiment((\s(0|[1-9][0-9]*)\.[0-9]+)+)$', line)
                     simulation.params['general']['disembarks'] = [float(number) for number in (match.group(1).split(' ')[1:])]
@@ -43,6 +47,8 @@ class Parser:
                     match = re.match('disembarks\s((0|[1-9][0-9]*)\.[0-9]+)$', line)
                     simulation.params['general']['disembarks'] = [float(match.group(1))]
             elif line.startswith('departs'):
+                if simulation.params['general']['departs'] != []:
+                    raise Exception("The departs rate can be specified only once per input file!")
                 if 'experiment' in line:
                     match = re.match('departs\sexperiment((\s(0|[1-9][0-9]*)\.[0-9]+)+)$', line)
                     simulation.params['general']['departs'] = [float(number) for number in (match.group(1).split(' ')[1:])]
@@ -51,6 +57,8 @@ class Parser:
                     match = re.match('departs\s((0|[1-9][0-9]*)\.[0-9]+)$', line)
                     simulation.params['general']['departs'] = [float(match.group(1))]
             elif line.startswith('new passengers'):
+                if simulation.params['general']['new passengers'] != []:
+                    raise Exception("The new passengers rate can be specified only once per input file!")
                 if 'experiment' in line:
                     match = re.match('new\spassengers\sexperiment((\s(0|[1-9][0-9]*)\.[0-9]+)+)$', line)
                     simulation.params['general']['new passengers'] = [float(number) for number in (match.group(1).split(' ')[1:])]
@@ -59,11 +67,17 @@ class Parser:
                     match = re.match('new\spassengers\s((0|[1-9][0-9]*)\.[0-9]+)$', line)
                     simulation.params['general']['new passengers'] = [float(match.group(1))]
             elif line.startswith('stop time'):
-                    match = re.match('stop\stime\s((0|[1-9][0-9]*)\.[0-9]+)$', line)
-                    simulation.params['control']['stopTime'] = float(match.group(1))
+                if 'stop time' in simulation.params['control']:
+                    raise Exception("The stop time can be specified only once per input file!")
+                match = re.match('stop\stime\s((0|[1-9][0-9]*)\.[0-9]+)$', line)
+                simulation.params['control']['stopTime'] = float(match.group(1))
             elif line == 'ignore warnings':
+                if simulation.params['control']['ignoreWarnings']:
+                    raise Exception("Ignore warnings flag can be specified only once per input file!")
                 simulation.params['control']['ignoreWarnings'] = True
             elif line == 'optimise parameters':
+                if simulation.params['control']['optimiseParameters']:
+                    raise Exception("Optimise parameters flag can be specified only once per input file!")
                 simulation.params['control']['optimiseParameters'] = True
             # Parsing arguments that affect the network object:
             elif line.startswith('route'):
@@ -83,5 +97,5 @@ class Parser:
                 return
             else:
                 raise Exception('"{0}" could not be recognised as a valid input line'.format(line))
-        except:
+        except AttributeError, KeyError:
             raise Exception('Line "{0}" could not be parsed because the values specified are incorrect'.format(line))
