@@ -76,7 +76,7 @@ class Simulation:
         return [dict(zip(self.params['general'].keys(), p)) for p in product]
     
         
-    def print_experimentation_parameters(self, generalParamSet, roadSet): 
+    def print_experimentation_parameters(self, generalParamSet, roadSet, routeSet): 
         ''' Method that prints all experimentation values of the given parameter dicts''' 
         for key in generalParamSet:
             if len(self.params['general'][key]) > 1:
@@ -84,6 +84,13 @@ class Simulation:
         for (stop1, stop2) in roadSet:
             if len(self.params['roads'][(stop1, stop2)]) > 1:
                 print 'road {0} {1} {2}'.format(stop1, stop2, roadSet[(stop1, stop2)])
+        for route in routeSet:
+            outStr = ''
+            for key in self.params['routes'].values()[0]:
+                if len(self.params['routes'][route['routeID']][key]) > 1:
+                    outStr += ' ' + key + ' ' + str(route[key])
+            if outStr != '':
+                print 'route ' + str(route['routeID']) + outStr
         
 
     def execute_experimentation(self, generalParamSets, roadSets):
