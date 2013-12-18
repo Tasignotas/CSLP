@@ -62,7 +62,6 @@ class Simulation:
         return [list(set) for set in apply(itertools.product, route_product)]
         
 
-    
     def generateRoadSets(self):
         ''' This method generates all possible route throughput rate combinations'''
         product = [x for x in apply(itertools.product, self.params['roads'].values())]
@@ -93,17 +92,19 @@ class Simulation:
                 print 'route ' + str(route['routeID']) + outStr
         
 
-    def execute_experimentation(self, generalParamSets, roadSets):
+    def execute_experimentation(self, generalParamSets, roadSets, routeSets):
         ''' This method performs experimentation over all parameter values'''
         initialNetwork = deepcopy(self.Network)
         for generalParamSet in generalParamSets:
             for roadSet in roadSets:
-                self.Network.changeGeneralParams(generalParamSet)
-                self.Network.changeRoadParams(roadSet)
-                self.print_experimentation_parameters(generalParamSet, roadSet)
-                self.execute_simulation_loop()
-                self.print_statistics()
-                self.Network = deepcopy(initialNetwork)
+                for routeSet in routeSets:
+                    self.Network.changeGeneralParams(generalParamSet)
+                    self.Network.changeRoadParams(roadSet)
+                    self.Network.changeRouteParams(routeSet)
+                    self.print_experimentation_parameters(generalParamSet, roadSet, routeSet)
+                    self.execute_simulation_loop()
+                    self.print_statistics()
+                    self.Network = deepcopy(initialNetwork)
                             
                                           
     def execute_optimisation(self, generalParamSets, roadSets):
@@ -161,10 +162,11 @@ class Simulation:
         ''' This method chooses the right kind of simulation type to be run '''
         generalParamSets = self.generateGeneralParamSets()
         roadSets = self.generateRoadSets()
+        routeSets = self.generateRouteSets()
         if self.params['control']['optimiseParameters']:
             self.execute_optimisation(generalParamSets, roadSets)
         elif self.params['control']['experimentation']:
-            self.execute_experimentation(generalParamSets, roadSets)
+            self.execute_experimentation(generalParamSets, roadSets, routeSets)
         else:
             self.Network.changeGeneralParams(generalParamSets[0])
             self.Network.changeRoadParams(roadSets[0])
