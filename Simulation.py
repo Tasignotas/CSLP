@@ -224,6 +224,9 @@ class Simulation:
                         roadUsed = True
             if not roadUsed:
                 warnings.warn('Road between stops {0} and {1} is specified but not used'.format(depStop, destStop))
+        # Checking if the simulation has experimentation parameters if we need to optimise it:
+        if self.params['control']['optimiseParameters'] and not (self.params['control']['experimentation']):
+            raise Exception('There are no experimentation values given although optimisation flag is set to True')
         # If no errors were raised, we load the network for the simulation:
         self.Network = network
 
