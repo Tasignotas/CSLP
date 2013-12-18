@@ -121,7 +121,10 @@ class Simulation:
                         self.execute_simulation_loop(outputEvents=False)
                         # Getting the number of missed passengers:
                         totalPassengers = sum([stop.missedPassengers for stop in self.Network.stops.values()])
-                        cost = totalPassengers * reduce(operator.mul, generalParamSet.values()) * reduce(operator.mul, roadSet.values())
+                        generalParamSum = sum(generalParamSet.values())
+                        roadParamSum = sum(roadSet.values())
+                        routeParamSum = sum(sum([route.values() for route in routeSet], []))
+                        cost = totalPassengers * (generalParamSum + roadParamSum + routeParamSum)
                         if not (minCost) or (minCost > cost):
                             minCost = cost
                             maxGeneralParamSet = generalParamSet
