@@ -15,7 +15,7 @@ class Simulation:
     ''' A class that controls the entire simulation and performs events using
     the constructed bus network'''
     def __init__(self):
-        self.Network = None
+        self.Network = Network()
         self.params = {'control' : {},
                        'general' : {},
                        'roads' : {},
