@@ -75,7 +75,7 @@ class Simulation:
         return [dict(zip(self.params['general'].keys(), p)) for p in product]
     
         
-    def print_experimentation_parameters(self, generalParamSet, roadSet, routeSet): 
+    def printExperimentationParameters(self, generalParamSet, roadSet, routeSet): 
         ''' Method that prints all experimentation values of the given parameter dicts''' 
         for key in generalParamSet:
             if len(self.params['general'][key]) > 1:
@@ -92,7 +92,7 @@ class Simulation:
                 print 'route ' + str(route['routeID']) + outStr
         
 
-    def execute_experimentation(self, generalParamSets, roadSets, routeSets):
+    def executeExperimentation(self, generalParamSets, roadSets, routeSets):
         ''' This method performs experimentation over all parameter values'''
         initialNetwork = deepcopy(self.Network)
         for generalParamSet in generalParamSets:
@@ -101,13 +101,13 @@ class Simulation:
                     self.Network.changeGeneralParams(generalParamSet)
                     self.Network.changeRoadParams(roadSet)
                     self.Network.changeRouteParams(routeSet)
-                    self.print_experimentation_parameters(generalParamSet, roadSet, routeSet)
-                    self.execute_simulation_loop()
-                    self.print_statistics()
+                    self.printExperimentationParameters(generalParamSet, roadSet, routeSet)
+                    self.executeSimulationLoop()
+                    self.printStatistics()
                     self.Network = deepcopy(initialNetwork)
                             
                                           
-    def execute_optimisation(self, generalParamSets, roadSets, routeSets):
+    def executeOptimisation(self, generalParamSets, roadSets, routeSets):
         ''' This method performs parameter optimisation'''
         minCost = None
         initialNetwork = deepcopy(self.Network)
@@ -118,7 +118,7 @@ class Simulation:
                         self.Network.changeGeneralParams(generalParamSet)
                         self.Network.changeRoadParams(roadSet)
                         self.Network.changeRouteParams(routeSet)
-                        self.execute_simulation_loop(outputEvents=False)
+                        self.executeSimulationLoop(outputEvents=False)
                         # Getting the number of missed passengers:
                         totalPassengers = sum([stop.missedPassengers for stop in self.Network.stops.values()])
                         generalParamSum = sum(generalParamSet.values())
@@ -132,10 +132,10 @@ class Simulation:
                             maxRouteSet = routeSet
                         self.Network = deepcopy(initialNetwork)
         print 'Bus network is optimized with setting the parameters as:'
-        self.print_experimentation_parameters(maxGeneralParamSet, maxRoadSet, maxRouteSet)
+        self.printExperimentationParameters(maxGeneralParamSet, maxRoadSet, maxRouteSet)
     
     
-    def print_statistics(self):
+    def printStatistics(self):
         ''' Method that prints the statistics of the most recent run of the simulation'''
         # Missed passengers:
         total = 0
@@ -164,24 +164,24 @@ class Simulation:
         
     
 
-    def execute_simulation(self):
+    def executeSimulation(self):
         ''' This method chooses the right kind of simulation type to be run '''
         generalParamSets = self.generateGeneralParamSets()
         roadSets = self.generateRoadSets()
         routeSets = self.generateRouteSets()
         if self.params['control']['optimiseParameters']:
-            self.execute_optimisation(generalParamSets, roadSets, routeSets)
+            self.executeOptimisation(generalParamSets, roadSets, routeSets)
         elif self.params['control']['experimentation']:
-            self.execute_experimentation(generalParamSets, roadSets, routeSets)
+            self.executeExperimentation(generalParamSets, roadSets, routeSets)
         else:
             self.Network.changeGeneralParams(generalParamSets[0])
             self.Network.changeRoadParams(roadSets[0])
             self.Network.changeRouteParams(routeSets[0])
-            self.execute_simulation_loop()
-            self.print_statistics()
+            self.executeSimulationLoop()
+            self.printStatistics()
             
 
-    def execute_simulation_loop(self, outputEvents=True):
+    def executeSimulationLoop(self, outputEvents=True):
         ''' This method implements the main simulation loop '''
         currentTime = 0
         while currentTime <= self.params['control']['stopTime']:
@@ -272,4 +272,4 @@ if __name__ == '__main__':
     fileName = raw_input('Please enter the name of the input file: ')
     Parser.Parser.parseFile(fileName, simulation)
     simulation.validateSimulation()
-    simulation.execute_simulation()
+    simulation.executeSimulation()
