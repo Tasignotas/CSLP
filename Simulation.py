@@ -173,6 +173,7 @@ class Simulation:
         else:
             self.Network.changeGeneralParams(generalParamSets[0])
             self.Network.changeRoadParams(roadSets[0])
+            self.Network.changeRouteParams(routeSets[0])
             self.execute_simulation_loop()
             self.print_statistics()
             
