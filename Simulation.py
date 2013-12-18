@@ -232,17 +232,17 @@ class Simulation:
         warnings.simplefilter('always' if self.params['control']['ignoreWarnings'] else 'error')
         # Checking if all of the rates that must be specified are there:
         try:
-            if len(self.params['general']['board']) == []:
+            if self.params['general']['board'] == []:
                 raise Exception('No board rate has been specified')
-            if len(self.params['general']['disembarks']) == []:
+            if self.params['general']['disembarks'] == []:
                 raise Exception('No disembarks rate has been specified')
-            if len(self.params['general']['departs']) == []:
+            if self.params['general']['departs'] == []:
                 raise Exception('No departs rate has been specified')
-            if len(self.params['general']['new passengers']) == []:
+            if self.params['general']['new passengers'] == []:
                 raise Exception('No new passenger rate has been specified')
-            if not(self.params['control']['stopTime']):
+            if not('stopTime' in self.params['control']):
                 raise Exception('No stop time has been specified')
-        except:
+        except KeyError:
             raise Exception('Some of the necessary rates of the network are not specified')
         # Checking if all routes have roads defined:
         for route in self.Network.routes.values():
