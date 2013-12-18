@@ -41,6 +41,17 @@ class Simulation:
         elif throughput != self.params['roads'][(stop1, stop2)]:
             raise Exception('Two different throughputs are specified for the road {0} -> {1}').format(stop1, stop2)
         
+        
+    def addRoute(self, routeID, stopIDs, busCount, capacity):
+        ''' This method adds a new route to the network and stores the experimentation values'''
+        busCount.sort()
+        capacity.sort()
+        self.Network.addRoute(routeID, stopIDs, busCount[0], capacity[0])
+        self.params['routes'][routeID] = {'routeID' : routeID,
+                                          'busCount' : [busCount],
+                                          'capacity' : [capacity]
+                                          }
+
     
     def generateRoadSets(self):
         ''' This method generates all possible route throughput rate combinations'''
