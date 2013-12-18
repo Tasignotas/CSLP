@@ -127,6 +127,16 @@ class Network:
     def changeRoadParams(self, paramDict):
         ''' Method that changes the road params with those specified in the dictionary'''
         self.roads = paramDict
+        
+    
+    def changeRouteParams(self, routeDict):
+        ''' Method that changes the route parameters with those specified in the dictionary'''
+        print routeDict
+        for route in routeDict:
+            for x in range(len(self.routes[route['routeID']].buses), route['busCount']):
+                self.routes[route['routeID']].getNewBus()
+            for bus in self.routes[route['routeID']].buses:
+                bus.capacity = route['capacity']
   
 
     def addRoute(self, routeID, stopIDs, busCount, capacity):
