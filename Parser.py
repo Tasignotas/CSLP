@@ -29,35 +29,35 @@ class Parser:
             if line.startswith('board'):
                 if 'experiment' in line:
                     match = re.match('board\sexperiment((\s(0|[1-9][0-9]*)\.[0-9]+)+)$', line)
-                    simulation.params['general']['boardRatioList'] = [float(number) for number in (match.group(1).split(' ')[1:])]
+                    simulation.params['general']['board'] = [float(number) for number in (match.group(1).split(' ')[1:])]
                     simulation.params['control']['experimentation'] = True
                 else:
                     match = re.match('board\s((0|[1-9][0-9]*)\.[0-9]+)$', line)
-                    simulation.params['general']['boardRatioList'] = [float(match.group(1))]
+                    simulation.params['general']['board'] = [float(match.group(1))]
             elif line.startswith('disembarks'):
                 if 'experiment' in line:
                     match = re.match('disembarks\sexperiment((\s(0|[1-9][0-9]*)\.[0-9]+)+)$', line)
-                    simulation.params['general']['disembarksRatioList'] = [float(number) for number in (match.group(1).split(' ')[1:])]
+                    simulation.params['general']['disembarks'] = [float(number) for number in (match.group(1).split(' ')[1:])]
                     simulation.params['control']['experimentation'] = True
                 else:
                     match = re.match('disembarks\s((0|[1-9][0-9]*)\.[0-9]+)$', line)
-                    simulation.params['general']['disembarksRatioList'] = [float(match.group(1))]
+                    simulation.params['general']['disembarks'] = [float(match.group(1))]
             elif line.startswith('departs'):
                 if 'experiment' in line:
                     match = re.match('departs\sexperiment((\s(0|[1-9][0-9]*)\.[0-9]+)+)$', line)
-                    simulation.params['general']['depRatioList'] = [float(number) for number in (match.group(1).split(' ')[1:])]
+                    simulation.params['general']['departs'] = [float(number) for number in (match.group(1).split(' ')[1:])]
                     simulation.params['control']['experimentation'] = True
                 else:
                     match = re.match('departs\s((0|[1-9][0-9]*)\.[0-9]+)$', line)
-                    simulation.params['general']['depRatioList'] = [float(match.group(1))]
+                    simulation.params['general']['departs'] = [float(match.group(1))]
             elif line.startswith('new passengers'):
                 if 'experiment' in line:
                     match = re.match('new\spassengers\sexperiment((\s(0|[1-9][0-9]*)\.[0-9]+)+)$', line)
-                    simulation.params['general']['newPassRatioList'] = [float(number) for number in (match.group(1).split(' ')[1:])]
+                    simulation.params['general']['new passengers'] = [float(number) for number in (match.group(1).split(' ')[1:])]
                     simulation.params['control']['experimentation'] = True
                 else:
                     match = re.match('new\spassengers\s((0|[1-9][0-9]*)\.[0-9]+)$', line)
-                    simulation.params['general']['newPassRatioList'] = [float(match.group(1))]
+                    simulation.params['general']['new passengers'] = [float(match.group(1))]
             elif line.startswith('stop time'):
                     match = re.match('stop\stime\s((0|[1-9][0-9]*)\.[0-9]+)$', line)
                     simulation.params['control']['stopTime'] = float(match.group(1))

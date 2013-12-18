@@ -24,10 +24,10 @@ class Simulation:
         self.params['control']['ignoreWarnings'] = False
         self.params['control']['optimiseParameters'] = False
         self.params['control']['experimentation'] = False
-        self.params['general']['boardRatioList'] = []
-        self.params['general']['disembarksRatioList'] = []
-        self.params['general']['depRatioList'] = []
-        self.params['general']['newPassRatioList'] = []
+        self.params['general']['board'] = []
+        self.params['general']['disembarks'] = []
+        self.params['general']['departs'] = []
+        self.params['general']['new passengers'] = []
 
 
     def __eq__(self, another):
@@ -187,7 +187,7 @@ class Simulation:
         while currentTime <= self.params['control']['stopTime']:
             # Getting all of the events that could occur:
             rates = self.getEventRates()
-            totalRate = (self.Network.params['newPassRatio'] + rates['paxRTBRate'] +
+            totalRate = (self.Network.params['new passengers'] + rates['paxRTBRate'] +
                          rates['paxRTDRate'] + rates['busesRTARate'] +
                          rates['busesRTDRate'])
             delay = -(1.0/totalRate) * log10(uniform(0.0, 1.0))
@@ -199,11 +199,11 @@ class Simulation:
         ''' This method gets rates needed for choosing the event to execute'''
         rates = {}
         # Passengers ready to board rate:
-        rates['paxRTBRate'] = len(self.Network.getPaxRTB()) * self.Network.params['boardRatio']
+        rates['paxRTBRate'] = len(self.Network.getPaxRTB()) * self.Network.params['board']
         # Passengers ready to disembark rate:
-        rates['paxRTDRate'] = len(self.Network.getPaxRTD()) * self.Network.params['disembarksRatio']
+        rates['paxRTDRate'] = len(self.Network.getPaxRTD()) * self.Network.params['disembarks']
         # Buses ready to depart rate:
-        rates['busesRTDRate'] = len(self.Network.getBusesRTD()) * self.Network.params['depRatio']
+        rates['busesRTDRate'] = len(self.Network.getBusesRTD()) * self.Network.params['departs']
         # Buses ready to arrive rate:
         rates['busesRTARate'] = sum([self.Network.getThroughput(bus) for (bus, route) in self.Network.getBusesRTA()])
         #print rates
@@ -232,13 +232,13 @@ class Simulation:
         warnings.simplefilter('always' if self.params['control']['ignoreWarnings'] else 'error')
         # Checking if all of the rates that must be specified are there:
         try:
-            if len(self.params['general']['boardRatioList']) == 0:
+            if len(self.params['general']['board']) == 0:
                 raise Exception('No board rate has been specified')
-            if len(self.params['general']['disembarksRatioList']) == 0:
+            if len(self.params['general']['disembarks']) == 0:
                 raise Exception('No disembarks rate has been specified')
-            if len(self.params['general']['depRatioList']) == 0:
+            if len(self.params['general']['departs']) == 0:
                 raise Exception('No departs rate has been specified')
-            if len(self.params['general']['newPassRatioList']) == 0:
+            if len(self.params['general']['new passengers']) == 0:
                 raise Exception('No new passenger rate has been specified')
             if not(self.params['control']['stopTime']):
                 raise Exception('No stop time has been specified')

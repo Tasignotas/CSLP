@@ -16,9 +16,9 @@ class ParserTests(unittest.TestCase):
     def testBoard(self):
         ''' Tests if the board parameters are parsed correctly by the parser'''
         Parser.Parser._parseLine('board experiment 0.5 0.6 0.7', self.simulation)
-        self.assertEqual(self.simulation.params['general']['boardRatioList'], [0.5, 0.6, 0.7])
+        self.assertEqual(self.simulation.params['general']['board'], [0.5, 0.6, 0.7])
         Parser.Parser._parseLine('board 0.5', self.simulation)
-        self.assertEqual(self.simulation.params['general']['boardRatioList'], [0.5])
+        self.assertEqual(self.simulation.params['general']['board'], [0.5])
         self.assertRaises(Exception, Parser.Parser._parseLine, 'board ', self.simulation)
         self.assertRaises(Exception, Parser.Parser._parseLine, 'board 0.5 0.6 0.7', self.simulation)
         
@@ -26,27 +26,27 @@ class ParserTests(unittest.TestCase):
     def testDisembarks(self):
         ''' Tests if the disembarks parameters are parsed correctly by the parser'''
         Parser.Parser._parseLine('disembarks experiment 0.5 0.6 0.7', self.simulation)
-        self.assertEqual(self.simulation.params['general']['disembarksRatioList'], [0.5, 0.6, 0.7])
+        self.assertEqual(self.simulation.params['general']['disembarks'], [0.5, 0.6, 0.7])
         Parser.Parser._parseLine('disembarks 0.5', self.simulation)
-        self.assertEqual(self.simulation.params['general']['disembarksRatioList'], [0.5])
+        self.assertEqual(self.simulation.params['general']['disembarks'], [0.5])
         self.assertRaises(Exception, Parser.Parser._parseLine, 'disembarks 0.5 0.6 0.7', self.simulation)
         
         
     def testDeparts(self):
         ''' Tests if the departs parameters are parsed correctly by the parser'''
         Parser.Parser._parseLine('departs experiment 0.5 0.6 0.7', self.simulation)
-        self.assertEqual(self.simulation.params['general']['depRatioList'], [0.5, 0.6, 0.7])
+        self.assertEqual(self.simulation.params['general']['departs'], [0.5, 0.6, 0.7])
         Parser.Parser._parseLine('departs 0.5', self.simulation)
-        self.assertEqual(self.simulation.params['general']['depRatioList'], [0.5])
+        self.assertEqual(self.simulation.params['general']['departs'], [0.5])
         self.assertRaises(Exception, Parser.Parser._parseLine, 'departs 0.5 0.6 0.7', self.simulation)
         
         
     def testNewPassengers(self):
         ''' Tests if the new passengers parameters are parsed correctly by the parser'''
         Parser.Parser._parseLine('new passengers experiment 0.5 0.6 0.7', self.simulation)
-        self.assertEqual(self.simulation.params['general']['newPassRatioList'], [0.5, 0.6, 0.7])
+        self.assertEqual(self.simulation.params['general']['new passengers'], [0.5, 0.6, 0.7])
         Parser.Parser._parseLine('new passengers 0.5', self.simulation)
-        self.assertEqual(self.simulation.params['general']['newPassRatioList'], [0.5])
+        self.assertEqual(self.simulation.params['general']['new passengers'], [0.5])
         self.assertRaises(Exception, Parser.Parser._parseLine, 'new passengers 0.5 0.6 0.7', self.simulation)
         
     
