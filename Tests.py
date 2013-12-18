@@ -99,6 +99,16 @@ class ParserTests(unittest.TestCase):
         with patch.object(self.simulation, 'addRoute') as mock:
             Parser.Parser._parseLine('route 1 stops 1 2 3 buses 4 capacity 50', self.simulation)
         mock.assert_called_with(1, [1, 2, 3], [4], [50])
+        with patch.object(self.simulation, 'addRoute') as mock:
+            Parser.Parser._parseLine('route 1 stops 1 2 3 buses experiment 4 5 6 capacity 50', self.simulation)
+        mock.assert_called_with(1, [1, 2, 3], [4, 5, 6], [50])
+        with patch.object(self.simulation, 'addRoute') as mock:
+            Parser.Parser._parseLine('route 1 stops 1 2 3 buses 4 capacity experiment 50 500', self.simulation)
+        mock.assert_called_with(1, [1, 2, 3], [4], [50, 500])
+        with patch.object(self.simulation, 'addRoute') as mock:
+            Parser.Parser._parseLine('route 1 stops 1 2 3 buses experiment 4 5 9 capacity experiment 50 55 100', self.simulation)
+        mock.assert_called_with(1, [1, 2, 3], [4, 5, 9], [50, 55, 100])
+        self.assertRaises(Exception, Parser.Parser._parseLine, 'route 1 stops 1 2 3 buses experiment capacity 50', self.simulation)
 
 
 if __name__ == '__main__':
