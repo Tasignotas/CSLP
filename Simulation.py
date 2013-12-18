@@ -52,6 +52,16 @@ class Simulation:
                                           'capacity' : [capacity]
                                           }
 
+
+    def generateRouteSets(self):
+        ''' This method generates all possible route experimental value combinations'''
+        route_product = []
+        for route in self.params['routes'].values():
+            product = [x for x in apply(itertools.product, route.values())]
+            route_product.append([dict(zip(route.keys(), p)) for p in product])
+        return [list(set) for set in apply(itertools.product, route_product)]
+        
+
     
     def generateRoadSets(self):
         ''' This method generates all possible route throughput rate combinations'''
