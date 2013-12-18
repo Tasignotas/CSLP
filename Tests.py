@@ -90,6 +90,10 @@ class ParserTests(unittest.TestCase):
         with patch.object(self.simulation, 'addRoad') as mock:
             Parser.Parser._parseLine('road 1 2 0.3', self.simulation)
         mock.assert_called_with(1, 2, [0.3])
+        with patch.object(self.simulation, 'addRoad') as mock:
+            Parser.Parser._parseLine('road 1 2 experiment 0.3 0.5 0.8', self.simulation)
+        mock.assert_called_with(1, 2, [0.3, 0.5, 0.8])
+        self.assertRaises(Exception, Parser.Parser._parseLine, 'road 1 2 4', self.simulation)
         
         
     def testRoute(self):
