@@ -107,26 +107,29 @@ class Simulation:
                     self.Network = deepcopy(initialNetwork)
                             
                                           
-    def execute_optimisation(self, generalParamSets, roadSets):
+    def execute_optimisation(self, generalParamSets, roadSets, routeSets):
         ''' This method performs parameter optimisation'''
         minCost = None
         initialNetwork = deepcopy(self.Network)
         for generalParamSet in generalParamSets:
             for roadSet in roadSets:
-                if minCost != 0:
-                    self.Network.changeGeneralParams(generalParamSet)
-                    self.Network.changeRoadParams(roadSet)
-                    self.execute_simulation_loop(outputEvents=False)
-                    # Getting the number of missed passengers:
-                    totalPassengers = sum([stop.missedPassengers for stop in self.Network.stops.values()])
-                    cost = totalPassengers * reduce(operator.mul, generalParamSet.values()) * reduce(operator.mul, roadSet.values())
-                    if not (minCost) or (minCost > cost):
-                        minCost = cost
-                        maxGeneralParamSet = generalParamSet
-                        maxRoadSet = roadSet
-                    self.Network = deepcopy(initialNetwork)
+                for routeSet in routeSets:
+                    if minCost != 0:
+                        self.Network.changeGeneralParams(generalParamSet)
+                        self.Network.changeRoadParams(roadSet)
+                        self.Network.changeRouteParams(routeSet)
+                        self.execute_simulation_loop(outputEvents=False)
+                        # Getting the number of missed passengers:
+                        totalPassengers = sum([stop.missedPassengers for stop in self.Network.stops.values()])
+                        cost = totalPassengers * reduce(operator.mul, generalParamSet.values()) * reduce(operator.mul, roadSet.values())
+                        if not (minCost) or (minCost > cost):
+                            minCost = cost
+                            maxGeneralParamSet = generalParamSet
+                            maxRoadSet = roadSet
+                            maxRouteSet = routeSet
+                        self.Network = deepcopy(initialNetwork)
         print 'Bus network is optimized with setting the parameters as:'
-        self.print_experimentation_parameters(maxGeneralParamSet, maxRoadSet)
+        self.print_experimentation_parameters(maxGeneralParamSet, maxRoadSet, maxRouteSet)
     
     
     def print_statistics(self):
@@ -164,7 +167,7 @@ class Simulation:
         roadSets = self.generateRoadSets()
         routeSets = self.generateRouteSets()
         if self.params['control']['optimiseParameters']:
-            self.execute_optimisation(generalParamSets, roadSets)
+            self.execute_optimisation(generalParamSets, roadSets, routeSets)
         elif self.params['control']['experimentation']:
             self.execute_experimentation(generalParamSets, roadSets, routeSets)
         else:
