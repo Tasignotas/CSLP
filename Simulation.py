@@ -232,13 +232,13 @@ class Simulation:
         warnings.simplefilter('always' if self.params['control']['ignoreWarnings'] else 'error')
         # Checking if all of the rates that must be specified are there:
         try:
-            if len(self.params['general']['board']) == 0:
+            if len(self.params['general']['board']) == []:
                 raise Exception('No board rate has been specified')
-            if len(self.params['general']['disembarks']) == 0:
+            if len(self.params['general']['disembarks']) == []:
                 raise Exception('No disembarks rate has been specified')
-            if len(self.params['general']['departs']) == 0:
+            if len(self.params['general']['departs']) == []:
                 raise Exception('No departs rate has been specified')
-            if len(self.params['general']['new passengers']) == 0:
+            if len(self.params['general']['new passengers']) == []:
                 raise Exception('No new passenger rate has been specified')
             if not(self.params['control']['stopTime']):
                 raise Exception('No stop time has been specified')
