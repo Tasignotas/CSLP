@@ -67,8 +67,10 @@ class Parser:
                 simulation.params['control']['optimiseParameters'] = True
             # Parsing arguments that affect the network object:
             elif line.startswith('route'):
-                matches = re.search('route\s([0-9]*)\sstops\s([0-9 ]*)\sbuses\s([0-9]*)\scapacity\s([0-9]*)', line).groups()
-                network.addRoute(int(matches[0]), map(int, str(matches[1]).split(' ')), int(matches[2]), int(matches[3]))
+                match = re.search('route\s(0|[1-9][0-9]*)\sstops((\s(0|[1-9][0-9]*))+)\sbuses\s(experiment((\s(0|[1-9][0-9]*))+)|(0|[1-9][0-9]*))\scapacity\s(experiment((\s(0|[1-9][0-9]*))+)|(0|[1-9][0-9]*))$', line)
+                simulation.addRoute(int(match.group(1)), map(int, match.group(2).strip().split(' ')), map(int, match.group(5).replace('experiment', '').strip().split(' ')), map(int, match.group(10).replace('experiment', '').strip().split(' ')))
+                if 'experiment' in line:
+                    simulation.params['control']['experimentation'] = True
             elif line.startswith('road'):
                 if 'experiment' in line:
                     match = re.match('road\s(0|[1-9][0-9]*)\s(0|[1-9][0-9]*)\sexperiment((\s(0|[1-9][0-9]*)\.[0-9]+)+)$', line)
