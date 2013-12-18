@@ -121,7 +121,7 @@ class Network:
     def changeGeneralParams(self, paramDict):
         ''' Method that changes the given network parameters'''
         for key in paramDict:
-            self.params[key.replace('List', '')] = paramDict[key]
+            self.params[key] = paramDict[key]
    
             
     def changeRoadParams(self, paramDict):
