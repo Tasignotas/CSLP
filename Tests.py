@@ -97,9 +97,9 @@ class ParserTests(unittest.TestCase):
         ''' Tests if the route parameters are parsed correctly by the parser:
             1. Checks if the addRoute method is called with correct parameters
             2. Checks if an exception is raised with incorrectly structured input'''
-        with patch.object(self.network, 'addRoute') as mock:
+        with patch.object(self.simulation, 'addRoute') as mock:
             Parser.Parser._parseLine('route 1 stops 1 2 3 buses 4 capacity 50', self.network, self.simulation)
-        mock.assert_called_with(1, [1, 2, 3], 4, 50)
+        mock.assert_called_with(1, [1, 2, 3], [4], [50])
 
 
 if __name__ == '__main__':
