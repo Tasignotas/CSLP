@@ -152,7 +152,10 @@ class Network:
                 self.stops[i] = Stop(i)
             self.stops[i].addReachableStops(stopIDs)
         # Adding new route:
-        self.routes[routeID] = Route(stopIDs, routeID, capacity)
+        if routeID in self.routes:
+            raise Exception('A route with a duplicate route id has been entered')
+        else:
+            self.routes[routeID] = Route(stopIDs, routeID, capacity)
         # Adding buses to the route:
         for i in range(0, busCount):
             bus = self.routes[routeID].getNewBus()
