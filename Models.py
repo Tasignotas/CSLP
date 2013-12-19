@@ -32,7 +32,7 @@ class Bus:
     def __eq__(self, another):
         return ((self.routeID == another.routeID) and (self.busNumber == another.busNumber) and
                 (self.capacity == another.capacity) and (self.status == another.status) and
-                (self.location == another.location) and (slef.passengers == another.passengers)
+                (self.location == another.location) and (self.passengers == another.passengers) and
                 (self.numberOfStops == another.numberOfStops) and
                 (self.averagePassengersTravelling == another.averagePassengersTravelling))
 
