@@ -24,7 +24,10 @@ class Parser:
     def _parseLine(line, simulation):
         ''' Method for parsing a line of input into a method call that changes
         the network and simulation objects'''
-        # Parsing arguments that affect the simulation object:
+        ''' Parsing arguments that affect the simulation object.
+            I wrote rigorous regexes that accept exactly the form of the input that has been specified in the assignment
+            If it can't match the expected input, it will raise an informative error.
+        '''
         try:
             if line.startswith('board'):
                 if simulation.params['general']['board'] != []:
