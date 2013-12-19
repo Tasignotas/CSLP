@@ -258,6 +258,24 @@ class SimulationTests(unittest.TestCase):
         self.assertEqual(self.expectedSimulation, self.simulation)
 
 
+    def testRates(self):
+        ''' This method will check if the event rates are calculated correctly'''
+        random.seed(0)
+        self.simulation.Network.changeGeneralParams(self.simulation.generateGeneralParamSets()[0])
+        self.simulation.Network.changeRoadParams(self.simulation.generateRoadSets()[0])
+        self.simulation.Network.addPassenger(0, False)
+        self.simulation.Network.addPassenger(0, False)
+        self.assertEqual(self.simulation.getEventRates(), {'paxRTDRate': 0.0, 'paxRTBRate': 0.6, 'busesRTDRate': 2.0, 'busesRTARate': 0})
+        self.simulation.Network.boardPassenger(0, False)
+        self.assertEqual(self.simulation.getEventRates(), {'paxRTDRate': 0.0, 'paxRTBRate': 0.3, 'busesRTDRate': 2.5, 'busesRTARate': 0})
+        self.simulation.Network.boardPassenger(0, False)
+        self.assertEqual(self.simulation.getEventRates(), {'paxRTDRate': 0.0, 'paxRTBRate': 0.0, 'busesRTDRate': 3.0, 'busesRTARate': 0})
+        self.simulation.Network.departBus(0, False)
+        self.assertEqual(self.simulation.getEventRates(), {'paxRTDRate': 0.0, 'paxRTBRate': 0.0, 'busesRTDRate': 2.5, 'busesRTARate': 0.3})
+        self.simulation.Network.arriveBus(0, False)
+        self.assertEqual(self.simulation.getEventRates(), {'paxRTDRate': 0.0, 'paxRTBRate': 0.0, 'busesRTDRate': 3.0, 'busesRTARate': 0})
+        
+
 def suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(ParserTests))
