@@ -161,6 +161,9 @@ class Simulation:
             print 'average queueing at stop {0} {1}'.format(stop.stopID, stop.totalQueueingTime/stop.numberOfBusesQueued)
             total += stop.totalQueueingTime/stop.numberOfBusesQueued
         print 'average queueing at all stops {0}'.format(total/len(self.Network.stops))
+        # I am not sure if there should be an empty line printed after the statistics.
+        # It looks nicer, but if it messes up your output parser then just comment it out.
+        print ''
         
     
 
