@@ -1,8 +1,15 @@
-route 1 stops 1 2 buses experiment 2 3 capacity experiment 10 20
-road 1 2 1.0
-road 2 1 1.0
-board 1.0
-disembarks 1.5
-departs 0.1
-new passengers 0.8
-stop time 20000.0
+route 1 stops 1 2 3 buses 4 capacity 50
+route 2 stops 3 5 8 buses 2 capacity 10
+road 1 2 0.3
+road 2 3 0.7
+road 3 1 0.2
+road 3 5 0.3
+road 5 3 0.1
+road 5 8 0.6
+road 8 3 0.8
+stop time 111.1
+new passengers 0.5
+departs 0.5
+disembarks 0.5
+board 0.3
+ignore warnings
