@@ -156,11 +156,13 @@ class Simulation:
             total += totalPerRoute
         print 'average passengers {0}'.format(total/len(self.Network.routes))
         # Average time spent queueing:
-        total = 0.0
+        totalTime = 0.0
+        totalBuses = 0
         for stop in self.Network.stops.values():
             print 'average queueing at stop {0} {1}'.format(stop.stopID, stop.totalQueueingTime/stop.numberOfBusesQueued)
-            total += stop.totalQueueingTime/stop.numberOfBusesQueued
-        print 'average queueing at all stops {0}'.format(total/len(self.Network.stops))
+            totalTime += stop.totalQueueingTime
+            totalBuses += stop.numberOfBusesQueued
+        print 'average queueing at all stops {0}'.format(totalTime/totalBuses)
         # I am not sure if there should be an empty line printed after the statistics.
         # It looks nicer, but if it messes up your output parser then just comment it out.
         print ''
