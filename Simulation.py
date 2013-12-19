@@ -9,7 +9,6 @@ from random import uniform
 from math import log10
 from copy import deepcopy
 import itertools
-import cProfile
 
 
 class Simulation:
@@ -279,5 +278,4 @@ if __name__ == '__main__':
     fileName = raw_input('Please enter the name of the input file: ')
     Parser.Parser.parseFile(fileName, simulation)
     simulation.validateSimulation()
-    cProfile.run('simulation.executeSimulation()')
-    #simulation.executeSimulation()
+    simulation.executeSimulation()
