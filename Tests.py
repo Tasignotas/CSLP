@@ -4,6 +4,7 @@ import Simulation
 import unittest
 from mock import Mock
 from mock import patch
+import random
 
 
 class ParserTests(unittest.TestCase):
@@ -241,7 +242,20 @@ class SimulationTests(unittest.TestCase):
 
     def testInitialNetwork(self):
         ''' This method will check if the constructed network looks as expected'''
-        self.assertEqual(self.expectedSimulation, self.simulation)       
+        self.assertEqual(self.expectedSimulation, self.simulation)
+        
+        
+    def testAddPassenger(self):
+        ''' This method will check if the passenger is added correctly to the network.
+            Although the simulation is non-deterministic, since we specify the seed, we know what to expect
+            (at least it works on my computer)
+        '''
+        random.seed(0)
+        self.simulation.Network.addPassenger(0, False)
+        self.simulation.Network.addPassenger(0, False)
+        self.expectedSimulation.Network.stops[5].passengers.append(Models.Passenger(8))
+        self.expectedSimulation.Network.stops[2].passengers.append(Models.Passenger(1))
+        self.assertEqual(self.expectedSimulation, self.simulation)
 
 
 def suite():
