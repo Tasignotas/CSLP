@@ -1,5 +1,5 @@
 ==========================
-CSLP by S1137931
+CSLP Bus traffic simulation project by S1137931
 ==========================
 
 Computer Science Large practical project.
