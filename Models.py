@@ -182,11 +182,12 @@ class Network:
         at the front of the bus queue suits them and is not full'''
         paxRTB = []
         for stop in self.stops.values():
-            for pax in stop.passengers:
-                if stop.qOfBuses:
-                    firstBus = stop.qOfBuses[0]
-                    if (pax.destStopID in self.routes[firstBus.routeID].stopSequence) and (len(firstBus.passengers) < firstBus.capacity):
-                        paxRTB.append((pax, firstBus))
+            if stop.qOfBuses:
+                firstBus = stop.qOfBuses[0]
+                if len(firstBus.passengers) < firstBus.capacity:
+                    for pax in stop.passengers:
+                        if (pax.destStopID in self.routes[firstBus.routeID].stopSequence):
+                            paxRTB.append((pax, firstBus))
         return paxRTB
 
 
@@ -211,15 +212,19 @@ class Network:
                 noneToDisembark = True
                 noneToBoard = True
                 # Checking if there is any passenger that wants to get onboard:
-                for pax in stop.passengers:
-                    if (pax.destStopID in self.routes[bus.routeID].stopSequence) and (len(bus.passengers) < bus.capacity):
-                        noneToBoard = False
+                if len(bus.passengers) < bus.capacity:
+                    for pax in stop.passengers:
+                        if (pax.destStopID in self.routes[bus.routeID].stopSequence):
+                            noneToBoard = False
+                            break
                 # Checking if there is any passenger that wants to disembark:
-                for pax in bus.passengers:
-                    if (pax.destStopID == bus.location) and (bus.status == 'Queueing'):
-                        noneToDisembark = False
-                if noneToBoard and noneToDisembark:
-                    busesRTD.append((bus, stop))
+                if noneToBoard:
+                    for pax in bus.passengers:
+                        if (pax.destStopID == bus.location) and (bus.status == 'Queueing'):
+                            noneToDisembark = False
+                            break
+                    if noneToBoard and noneToDisembark:
+                        busesRTD.append((bus, stop))
         return busesRTD
 
 
