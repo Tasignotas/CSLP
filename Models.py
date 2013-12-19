@@ -5,8 +5,6 @@ used in the simulation to mimic the real world: stops, roads, passengers and etc
 import random
 
 
-
-
 class Passenger:
     ''' A class representing a passenger in bus network'''
     def __init__(self, destStopID):
@@ -112,7 +110,8 @@ class Network:
         self.stops = {}
         self.roads = {}
         self.params = {}
-        random.seed(0)
+        #Uncomment the following line in order to make the simulation deterministic(ish)
+        #random.seed(0)
         
     
     def __eq__(self, another):
