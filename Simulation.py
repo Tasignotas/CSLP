@@ -198,6 +198,7 @@ class Simulation:
             delay = -(1.0/totalRate) * log10(uniform(0.0, 1.0))
             self.executeNextEvent(totalRate, rates, currentTime, outputEvents)
             currentTime += delay
+        self.Network.finishTakingStatistics(self.params['control']['stopTime'])
 
 
     def getEventRates(self):

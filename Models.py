@@ -137,6 +137,12 @@ class Network:
             for bus in self.routes[route['routeID']].buses:
                 bus.capacity = route['capacity']
   
+    
+    def finishTakingStatistics(self, stopTime):
+        ''' This method goes through all stops and makes them finish counting the bus queueing statistics'''
+        for stop in self.stops.values():
+            self.calculateQueueingTime(stop, stopTime)
+    
 
     def addRoute(self, routeID, stopIDs, busCount, capacity):
         ''' This method adds a route with its buses and stops to the network'''
