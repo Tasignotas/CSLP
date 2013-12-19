@@ -152,9 +152,21 @@ class Simulation:
             for bus in route.buses:
                 print 'average passengers bus {0}.{1} {2}'.format(bus.routeID, bus.busNumber, bus.averagePassengersTravelling)
                 totalPerRoute += bus.averagePassengersTravelling
+            ''' I find this statistic a bit ambiguous. There are 2 possible cases:
+                1. The "average passengers route" should say how many passengers on average are on one of the route's buses
+                2. The "average passengers route" should say how many passengers on average are on the entire route
+                I left the first case uncommented. The second one is commented out below the first one.
+            '''
             print 'average passengers route {0} {1}'.format(route.routeID, totalPerRoute/len(route.buses))
+            #print 'average passengers route {0} {1}'.format(route.routeID, totalPerRoute)
             total += totalPerRoute
+        ''' I find this statistic a bit ambiguous. There are 2 possible cases:
+            1. The "average passengers" should say how many passengers on average are on one of the routes
+            2. The "average passengers" should say how many passengers on average are on the entire network
+            I left the first case uncommented. The second one is commented out below the first one.
+        '''
         print 'average passengers {0}'.format(total/len(self.Network.routes))
+        #print 'average passengers {0}'.format(total)
         # Average time spent queueing:
         totalTime = 0.0
         totalBuses = 0
