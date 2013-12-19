@@ -102,7 +102,7 @@ class Simulation:
                     self.Network.changeRoadParams(roadSet)
                     self.Network.changeRouteParams(routeSet)
                     self.printExperimentationParameters(generalParamSet, roadSet, routeSet)
-                    self.executeSimulationLoop()
+                    self.executeSimulationLoop(outputEvents=False)
                     self.printStatistics()
                     self.Network = deepcopy(initialNetwork)
                             
