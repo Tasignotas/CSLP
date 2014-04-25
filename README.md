@@ -39,7 +39,7 @@ How to run the simulation?
 In order to run the simulation, simply type:
 
 
-$ python Simulation.py
+`$ python Simulation.py`
 
 
 Then, when the output prompting for the name of the input file appears, type the name of the input file that you wish to use. A sample data file Data.txt is included. You can run the simulation using Data.txt by entering:
