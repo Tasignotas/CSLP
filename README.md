@@ -15,11 +15,11 @@ The two main components of the simulation are the Simulation object and the Netw
 The code is split among 4 main files:
 
 
-Tests.py - includes unit tests for parser and simulation. The tests were written using unittest framework with Mock
+`Tests.py` - includes unit tests for parser and simulation. The tests were written using unittest framework with Mock
 
-Parser.py - includes a parser object which parses the input file and issues calls to the Simulation object. In this way the Simulation object collects all of the parameters for the simulation.
+`Parser.py` - includes a parser object which parses the input file and issues calls to the Simulation object. In this way the Simulation object collects all of the parameters for the simulation.
 
-Models.py - includes the definition of every object in the bus network: Passenger, Bus, Route, Road, Stop and Network objects. Network object contains methods that the Simulation object uses to "communicate" with the Network.
+`Models.py` - includes the definition of every object in the bus network: Passenger, Bus, Route, Road, Stop and Network objects. Network object contains methods that the Simulation object uses to "communicate" with the Network.
 
 Simulation.py - includes the definition and methods of the Simulation object which sets up the Network object and executes the simulation by "asking" the Network object to get all possible events and picks the event that should be performed next by the Network.
 
@@ -39,13 +39,13 @@ How to run the simulation?
 In order to run the simulation, simply type:
 
 
-$ python Simulation.py
+`$ python Simulation.py`
 
 
 Then, when the output prompting for the name of the input file appears, type the name of the input file that you wish to use. A sample data file Data.txt is included. You can run the simulation using Data.txt by entering:
 
 
-$ Data.txt
+`$ Data.txt`
 
 
 Then, depending on the input, the output from the simulation will appear on the screen and the simulation will eventually terminate.
@@ -59,7 +59,7 @@ Tests
 There are 21 test cases included that check the input parser and the actions of the Simulation object. If you wish to run them, type:
 
 
-$ python Tests.py
+`$ python Tests.py`
 
 
 ==========================
